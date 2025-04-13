@@ -11,7 +11,7 @@ class AccountService:
         self.account = account
 
     @transaction.atomic
-    def signup(self, serializer: SignupSerializer) -> SignupSerializer:
+    def signup(self, serializer: SignupSerializer) -> None:
         exist_account: bool = self.account.objects.filter(
             Q(email=serializer.validated_data.get("email"))
             | Q(username=serializer.validated_data.get("username"))
@@ -20,5 +20,3 @@ class AccountService:
             raise AccountAlreadyExistException()
 
         serializer.save()
-
-        return serializer.data
