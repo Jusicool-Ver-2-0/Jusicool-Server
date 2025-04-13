@@ -59,6 +59,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
+AUTH_USER_MODEL = 'accounts.Account'
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
