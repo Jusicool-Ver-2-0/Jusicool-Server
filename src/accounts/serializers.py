@@ -14,6 +14,11 @@ class SignupSerializer(serializers.ModelSerializer):
         fields = ("username", "password", "email", "school")
 
 
+class SigninSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=8)
+
+
 class EmailRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
