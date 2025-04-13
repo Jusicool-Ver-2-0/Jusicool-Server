@@ -12,3 +12,15 @@ class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ("username", "password", "email", "school")
+
+
+class EmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class EmailValidateSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.IntegerField(
+        min_value=100000,
+        max_value=999999
+    )
