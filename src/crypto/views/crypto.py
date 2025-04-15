@@ -15,7 +15,6 @@ class CryptoView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, )
     permission_classes = (IsAuthenticated, )
 
-    @method_decorator(cache_page(60 * 60 * 3))
     def get(self, request: Request) -> Response:
         crypto_data = CryptoService().query_crypto_code()
         serializer = CryptoSerializer(data=crypto_data, many=True)

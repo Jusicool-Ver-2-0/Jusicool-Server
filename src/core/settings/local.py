@@ -20,3 +20,5 @@ CACHES = {
         "LOCATION": os.environ.get("REDIS_URL", "redis://127.0.0.1:6379"),
     }
 }
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
