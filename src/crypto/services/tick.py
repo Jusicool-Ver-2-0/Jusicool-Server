@@ -1,15 +1,15 @@
-import asyncio
-
-import aiohttp
+import httpx
 
 
 class CryptoTickService:
-    async def stream_crypto_tick(self, crypto_code):
-        async with aiohttp.ClientSession() as session:
-            while True:
-                async with session.get(
-                    "https://api.upbit.com/v1/ticker",
-                    params={"markets": crypto_code},
-                ) as response:
-                    yield f"data: {await response.json()}\n\n"
-                    await asyncio.sleep(1)
+    def __init__(self, crypto_code: str):
+        self.crypto_code = crypto_code
+
+    async def fetch_crypto_tick(self):
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                "https://api.upbit.com/v1/ticker",
+                params={"markets": self.crypto_code}
+            )
+            response.raise_for_status()
+            return response.json()
