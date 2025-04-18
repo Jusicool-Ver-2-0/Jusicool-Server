@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     # Add-on
     "rest_framework",
     # Apps
-    "accounts"
+    "accounts",
+    "crypto_trade"
 ]
 
 REST_FRAMEWORK = {
