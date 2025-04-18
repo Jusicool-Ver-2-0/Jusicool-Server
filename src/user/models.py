@@ -4,8 +4,8 @@ from django.db import models
 from core.models import BaseModel
 
 
-class Account(BaseModel, AbstractUser):
-    class AccountStatus(models.TextChoices):
+class User(BaseModel, AbstractUser):
+    class UserStatus(models.TextChoices):
         ACTIVE = "ACTIVE"
         INACTIVE = "INACTIVE"
         PENDING = "PENDING"
@@ -15,9 +15,9 @@ class Account(BaseModel, AbstractUser):
 
     status = models.CharField(
         max_length=8,
-        choices=AccountStatus,
-        default=AccountStatus.PENDING
+        choices=UserStatus,
+        default=UserStatus.PENDING
     )
 
     class Meta:
-        db_table = "account"
+        db_table = "user"

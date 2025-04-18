@@ -4,30 +4,30 @@ from django.db.models import Q
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
-from accounts.exceptions import AccountAlreadyExistException
-from accounts.models import Account
-from accounts.serializers import SignupSerializer, SigninSerializer
+from user.exceptions import UserAlreadyExistException
+from user.models import User
+from user.serializers import SignupSerializer, SigninSerializer
 
 
 class AccountService:
-    def __init__(self, account: Account = Account):
-        self.account = account
+    def __init__(self, user: User = User):
+        self.user = user
 
     @transaction.atomic
     def signup(self, serializer: SignupSerializer) -> None:
-        exist_account: bool = self.account.objects.filter(
+        exists_user: bool = self.user.objects.filter(
             Q(email=serializer.validated_data.get("email"))
             | Q(username=serializer.validated_data.get("username"))
         ).exists()
-        if exist_account:
-            raise AccountAlreadyExistException()
+        if exists_user:
+            raise UserAlreadyExistException()
 
         serializer.save()
 
     @transaction.atomic
     def signin(self, request: Request, serializer: SigninSerializer) -> None:
         user = get_object_or_404(
-            self.account,
+            self.user,
             email=serializer.validated_data.get("email")
         )
 

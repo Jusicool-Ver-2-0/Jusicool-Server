@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     # Add-on
     "rest_framework",
     # Apps
-    "accounts",
-    "crypto_trade"
+    "user",
+    # "crypto_trade"
 ]
 
 REST_FRAMEWORK = {
@@ -60,7 +60,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
-AUTH_USER_MODEL = 'accounts.Account'
+AUTH_USER_MODEL = 'user.User'
 
 TEMPLATES = [
     {
