@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     # Apps
     "user",
+    "account"
     # "crypto_trade"
 ]
 
