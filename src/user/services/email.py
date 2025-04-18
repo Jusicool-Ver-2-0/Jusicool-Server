@@ -8,14 +8,20 @@ from django.db import transaction
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
+from account.models import Account
 from user.exceptions import CodeIsNotValidException
 from user.models import User
 from user.serializers import EmailValidateSerializer, EmailRequestSerializer
 
 
 class EmailService:
-    def __init__(self, account: User = User):
-        self.account = account
+    def __init__(
+            self,
+            user: User = User,
+            account: Account = Account,
+    ):
+        self.user = user
+        self.account = Account
 
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
@@ -41,7 +47,7 @@ class EmailService:
             raise CodeIsNotValidException()
 
         user: User = get_object_or_404(
-            self.account,
+            self.user,
             email=serializer.validated_data.get("email")
         )
         user.status = User.UserStatus.ACTIVE
