@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.db import transaction
 from django.db.models import Q
 from rest_framework.generics import get_object_or_404
@@ -35,4 +35,9 @@ class UserService:
         if user.status != UserStatus.ACTIVE:
             raise UserIsNotValidException()
 
-        login(request=request, user=user)
+        authenticated_user = authenticate(
+            request,
+            username=serializer.validated_data.get("username"),
+            password=serializer.validated_data.get("password")
+        )
+        login(request=request, user=authenticated_user)
