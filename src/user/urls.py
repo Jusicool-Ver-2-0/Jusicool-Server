@@ -1,8 +1,9 @@
 from django.urls import path
 
-from accounts.views.email import EmailRequestView, EmailValidateView
-from accounts.views.signin import SigninView
-from accounts.views.signup import SignupView
+from user.views.email import EmailRequestView, EmailValidateView
+from user.views.signin import SigninView
+from user.views.signup import SignupView
+
 
 urlpatterns = [
     path("/signup", SignupView.as_view()),
