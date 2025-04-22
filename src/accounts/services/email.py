@@ -3,8 +3,9 @@ import random
 from django.conf import settings
 from django.contrib.auth import login
 from django.core.cache import cache
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
+from django.template.loader import render_to_string
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
@@ -27,12 +28,24 @@ class EmailService:
             timeout=60 * 5
         )
 
-        EmailMessage(
+        context = {
+            "recipient_name": serializer.validated_data.get("email"),
+            "verification_code": code
+        }
+
+        html_content = render_to_string(
+            "../templates/mail_template.html",
+            context
+        )
+
+        email = EmailMultiAlternatives(
             subject=f"Jusicool mail authentication",
-            body=f'code: {code}',
+            body=html_content,
             to=(serializer.validated_data.get("email"), ),
             from_email=settings.EMAIL_HOST_USER,
-        ).send()
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
     @transaction.atomic
     def validate(self, request: Request, serializer: EmailValidateSerializer) -> None:
