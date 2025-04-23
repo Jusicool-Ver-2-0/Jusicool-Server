@@ -1,8 +1,8 @@
 #!/bin/sh
 
-mkdir -p /ubuntu/home/prod/Jusicool-Server
+mkdir -p /home/ubuntu/prod/Jusicool-Server
 
-cd /ubuntu/home/prod/Jusicool-Server
+cd /home/ubuntu/prod/Jusicool-Server
 
 if [ ! -d ".git" ]; then
   git clone -b develop https://github.com/bigbroCO-team/bigbro_company_server .
