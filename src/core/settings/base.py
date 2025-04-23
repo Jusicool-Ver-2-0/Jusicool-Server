@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     "rest_framework",
     # Apps
     "user"
+    "accounts",
+    "crypto"
 ]
 
 REST_FRAMEWORK = {
@@ -59,7 +62,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'accounts.Account'
 
 TEMPLATES = [
     {
@@ -77,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
 
 APPEND_SLASH = False
 
