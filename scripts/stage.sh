@@ -15,4 +15,4 @@ docker build . -t jusicool-stage
 docker stop jusicool-stage  || true
 docker rm jusicool-stage || true
 
-docker run -d --name jusicool-stage -p 8000:8000 jusicool-stage
+docker run -d --name jusicool-stage --env-file /.stage.env -p 8000:8000 jusicool-stage
