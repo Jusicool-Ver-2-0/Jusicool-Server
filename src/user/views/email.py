@@ -3,8 +3,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers import EmailRequestSerializer, EmailValidateSerializer
-from accounts.services.email import EmailService
+from user.serializers import EmailRequestSerializer, EmailValidateSerializer
+from user.services.email import EmailService
 from core.authentications import CsrfExemptSessionAuthentication
 
 
