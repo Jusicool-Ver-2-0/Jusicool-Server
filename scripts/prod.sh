@@ -5,9 +5,9 @@ mkdir -p /home/ubuntu/prod/Jusicool-Server
 cd /home/ubuntu/prod/Jusicool-Server
 
 if [ ! -d ".git" ]; then
-  git clone -b develop https://github.com/bigbroCO-team/bigbro_company_server .
+  git clone -b main https://github.com/bigbroCO-team/bigbro_company_server .
 else
-  git pull origin develop
+  git pull origin main
 fi
 
 docker build . -t jusicool-prod
