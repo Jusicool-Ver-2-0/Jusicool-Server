@@ -5,7 +5,7 @@ mkdir -p /home/ubuntu/prod/Jusicool-Server
 cd /home/ubuntu/prod/Jusicool-Server
 
 if [ ! -d ".git" ]; then
-  git clone -b main https://github.com/bigbroCO-team/bigbro_company_server .
+  git clone -b main https://github.com/Jusicool-Ver-2-0/Jusicool-Server .
 else
   git pull origin main
 fi
