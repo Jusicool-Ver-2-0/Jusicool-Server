@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # Add-on
     "rest_framework",
     # Apps
-    "user"
+    "user",
     "accounts",
     "crypto"
 ]
