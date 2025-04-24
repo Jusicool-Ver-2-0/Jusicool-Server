@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "rest_framework",
     # Apps
     "user",
-    "accounts",
     "crypto"
 ]
 
@@ -62,7 +61,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
-AUTH_USER_MODEL = 'accounts.Account'
+AUTH_USER_MODEL = 'user.User'
 
 TEMPLATES = [
     {
