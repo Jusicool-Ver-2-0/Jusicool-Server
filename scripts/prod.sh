@@ -15,4 +15,4 @@ docker build . -t jusicool-prod
 docker stop jusicool-prod  || true
 docker rm jusicool-prod || true
 
-docker run -d --name jusicool-prod --env-file /.prod.env -p 3000:8000 jusicool-prod
+docker run -d --name jusicool-prod --env-file /.prod.env --network jusicool -p 3000:8000 jusicool-prod
