@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django_apscheduler",
     # Apps
     "user",
-    "market"
+    "market",
+    "account"
 ]
 
 REST_FRAMEWORK = {
