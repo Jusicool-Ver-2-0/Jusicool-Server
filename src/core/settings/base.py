@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Add-on
     "rest_framework",
+    "django_apscheduler",
     # Apps
     "user",
+    "market"
 ]
 
 REST_FRAMEWORK = {
@@ -142,3 +144,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Crypto api base url
+CRYPTO_API_BASE_URL = os.environ.get("CRYPTO_API_BASE_URL", "https://api.upbit.com/v1")
+
+# Scheduler
+SCHEDULER_DEFAULT = True
