@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "django_apscheduler",
     # Apps
     "user",
-    "market"
+    "market",
+    "account",
+    "exchange"
 ]
 
 REST_FRAMEWORK = {
@@ -150,3 +152,6 @@ CRYPTO_API_BASE_URL = os.environ.get("CRYPTO_API_BASE_URL", "https://api.upbit.c
 
 # Scheduler
 SCHEDULER_DEFAULT = True
+
+# Exchange api base url
+EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")

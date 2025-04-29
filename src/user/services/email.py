@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
+from account.models import Account
 from user.enums import UserStatus
 from user.exceptions import CodeIsNotValidException
 from user.models import User
@@ -16,8 +17,14 @@ from user.serializers import EmailValidateSerializer, EmailRequestSerializer
 
 
 class EmailService:
-    def __init__(self, user: User = User):
+    def __init__(
+            self,
+            user: User = User,
+            account: Account = Account,
+    ):
         self.user = user
+        self.account = account
+
 
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
@@ -60,6 +67,8 @@ class EmailService:
         )
         user.status = UserStatus.ACTIVE
         user.save()
+
+        self.account.objects.create(user=user)
 
         cache.delete(serializer.validated_data.get("email"))
 
