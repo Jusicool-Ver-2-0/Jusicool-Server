@@ -21,19 +21,19 @@ class ExchangeService:
         self.account_history = account_history
 
     @transaction.atomic
-    def exchange(self, user, exchange_type: ExchangeType, data: ExchangeSerializer.validated_data):
+    def exchange(self, user, exchange_type: ExchangeType, serializer: ExchangeSerializer):
         if exchange_type == ExchangeType.KRW.value:
-            self._to_krw(user, data)
+            self._to_krw(user, serializer)
         elif exchange_type == ExchangeType.USD.value:
-            self._to_usd(user, data)
+            self._to_usd(user, serializer)
 
-    def _to_krw(self, user, data: ExchangeSerializer.validated_data):
+    def _to_krw(self, user, serializer: ExchangeSerializer):
         user_account = self.account.objects.get(user=user)
         krw_exchange_rate = self._get_krw_exchange_rate()
 
         # 환전
-        decrease_usd = data.get("amount")
-        increase_krw = int(data.get("amount") * krw_exchange_rate)
+        decrease_usd = serializer.validated_data.get("amount")
+        increase_krw = int(serializer.validated_data.get("amount") * krw_exchange_rate)
 
         if user_account.usd_balance < decrease_usd:
             raise ShortageUSDBalanceException()
@@ -48,16 +48,16 @@ class ExchangeService:
             account=user_account,
             changed_usd=-decrease_usd,
             changed_krw=increase_krw,
-            type=AccountHistoryType.EXCHANGE.value,
+            history_type=AccountHistoryType.EXCHANGE.value,
         ).save()
 
-    def _to_usd(self, user, data: ExchangeSerializer.validated_data):
+    def _to_usd(self, user, serializer: ExchangeSerializer):
         user_account = self.account.objects.get(user=user)
         krw_exchange_rate = self._get_krw_exchange_rate()
 
         # 환전
-        decrease_krw = int(data.get("amount") * krw_exchange_rate)
-        increase_usd = data.get("amount")
+        decrease_krw = int(serializer.validated_data.get("amount") * krw_exchange_rate)
+        increase_usd = serializer.validated_data.get("amount")
 
         if user_account.krw_balance < decrease_krw:
             raise ShortageKRWBalanceException()
@@ -72,10 +72,11 @@ class ExchangeService:
             account=user_account,
             changed_usd=increase_usd,
             changed_krw=-decrease_krw,
-            type=AccountHistoryType.EXCHANGE.value,
+            history_type=AccountHistoryType.EXCHANGE.value,
         ).save()
 
-    def _get_krw_exchange_rate(self):
+    @staticmethod
+    def _get_krw_exchange_rate():
         exchange_rate = requests.get(
             f"{settings.EXCHANGE_API_BASE_URL}/latest/USD"
         )

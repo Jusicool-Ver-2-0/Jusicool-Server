@@ -17,5 +17,5 @@ class ExchangeView(APIView):
     def post(self, request: Request, exchange_type: ExchangeType) -> Response:
         serializer = ExchangeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ExchangeService().exchange(user=request.user, data=serializer.validated_data, exchange_type=exchange_type)
+        ExchangeService().exchange(user=request.user, serializer=serializer, exchange_type=exchange_type)
         return Response(status=status.HTTP_204_NO_CONTENT)
