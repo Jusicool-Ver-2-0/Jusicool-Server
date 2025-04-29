@@ -19,7 +19,7 @@ class AccountHistory(BaseModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     changed_krw = models.BigIntegerField(default=0)
     changed_usd = models.DecimalField(default=0, max_digits=20, decimal_places=2)
-    type = models.CharField(
+    history_type = models.CharField(
         choices=AccountHistoryType.choices,
         max_length=8,
     )
