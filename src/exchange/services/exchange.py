@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import requests
 from django.conf import settings
+from django.db import transaction
 
 from account.enums import AccountHistoryType
 from exchange.enums import ExchangeType
@@ -19,6 +20,7 @@ class ExchangeService:
         self.account = account
         self.account_history = account_history
 
+    @transaction.atomic
     def exchange(self, user, exchange_type: ExchangeType, data: ExchangeSerializer.validated_data):
         if exchange_type == ExchangeType.KRW.value:
             self._to_krw(user, data)
