@@ -8,7 +8,7 @@ from user.models import User
 # Create your models here.
 class Account(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    krw_balance = models.PositiveIntegerField(default=0)
+    krw_balance = models.PositiveBigIntegerField(default=0)
     usd_balance = models.DecimalField(default=0, max_digits=20, decimal_places=2)
 
     class Meta:
