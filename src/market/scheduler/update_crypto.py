@@ -33,6 +33,7 @@ def update_crypto():
                 "type": MarketType.CRYPTO.value,
                 "korean_name": c["korean_name"],
                 "english_name": c["english_name"],
+                "market": c["market"]
             } for c in crypto_market_response.json()
         ],
         many=True
@@ -51,5 +52,5 @@ def update_crypto():
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_crypto, "cron", hour=0, minute=0)
+    scheduler.add_job(update_crypto, "cron", hour=14, minute=13)
     scheduler.start()
