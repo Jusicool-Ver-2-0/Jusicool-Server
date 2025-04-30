@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "user",
     "market",
     "account",
-    "exchange"
+    "exchange",
+    "crypto"
 ]
 
 REST_FRAMEWORK = {
