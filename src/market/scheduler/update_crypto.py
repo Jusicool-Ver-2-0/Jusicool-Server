@@ -52,5 +52,5 @@ def update_crypto():
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_crypto, "cron", hour=14, minute=13)
+    scheduler.add_job(update_crypto, "cron", hour=0, minute=0)
     scheduler.start()
