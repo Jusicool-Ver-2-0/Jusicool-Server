@@ -13,3 +13,8 @@ class InvalidQuantityException(APIException):
     default_detail = 'Invalid quantity'
     default_code = 'invalid_quantity'
 
+
+class TradePriceFetchException(APIException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    default_detail = 'Trade price fetch error'
+    default_code = 'trade_error'

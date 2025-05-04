@@ -8,7 +8,7 @@ from holding.models import Holding
 from market.enums import MarketType
 from market.models import Market
 from order.enums import OrderType, OrderStatus, ReserveType
-from order.exceptions import ShortageKRWBalanceException, InvalidQuantityException
+from order.exceptions import ShortageKRWBalanceException, InvalidQuantityException, TradePriceFetchException
 from order.models import Order
 from order.serializers import MarketOrderSerializer
 from order.services.order import OrderService
@@ -125,5 +125,7 @@ class CryptoOrderServiceImpl(OrderService):
         crypto_trade_price = requests.get(
             f"{settings.CRYPTO_API_BASE_URL}/ticker",
             params={"markets": market},
-        ).json()[0]
-        return float(crypto_trade_price.get("trade_price"))
+        )
+        if crypto_trade_price.status_code != 200:
+            raise TradePriceFetchException()
+        return float(crypto_trade_price.json()[0].get("trade_price"))
