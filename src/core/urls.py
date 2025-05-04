@@ -25,4 +25,5 @@ urlpatterns = [
     path("exchange", include("exchange.urls")),
     path("crypto", include("crypto.urls")),
     path("order", include("order.urls")),
+    path("holding", include("holding.urls")),
 ]
