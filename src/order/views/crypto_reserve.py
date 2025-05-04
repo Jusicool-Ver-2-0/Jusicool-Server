@@ -25,4 +25,7 @@ class CryptoReserveSellView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request: Request, crypto_id: int) -> Response:
-        pass
+        serializer = MarketReserveOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        CryptoReserveOrderServiceImpl().reserve_sell(request.user, serializer, crypto_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
