@@ -29,8 +29,9 @@ class CryptoOrderServiceImpl(OrderService):
     def buy(self, user, serializer: MarketOrderSerializer, market_id: int):
         user_account = self.account.objects.get(user=user)
         market = Market.objects.get(id=market_id)
+        quantity = serializer.validated_data.get("quantity")
 
-        trade_price, price = self._calculate_price(market.market, quantity=serializer.validated_data.get("quantity"))
+        trade_price, price = self._calculate_price(market.market, quantity=quantity)
 
         if user_account.krw_balance < price:
             raise ShortageKRWBalanceException()
@@ -44,7 +45,7 @@ class CryptoOrderServiceImpl(OrderService):
             user=user,
             order_type=OrderType.BUY.value,
             reserve_type=ReserveType.NOW.value,
-            quantity=serializer.validated_data.get("quantity"),
+            quantity=quantity,
             price=trade_price,
             status=OrderStatus.COMPLETED.value,
         )
@@ -58,14 +59,14 @@ class CryptoOrderServiceImpl(OrderService):
         ).first()
         if exists_holding:  # 현재가에 홀딩이 존재한다면 평균값 계산 후 수량 증가
             exists_holding.price = (exists_holding.price + trade_price) / 2
-            exists_holding.quantity += serializer.validated_data.get("quantity")
+            exists_holding.quantity += quantity
             exists_holding.save()
 
         else:  # 새로운 홀딩 생성
             Holding(
                 user=user,
                 market=market,
-                quantity=serializer.validated_data.get("quantity"),
+                quantity=quantity,
                 type=MarketType.CRYPTO.value,
                 price=trade_price,
             ).save()
@@ -86,11 +87,12 @@ class CryptoOrderServiceImpl(OrderService):
         user_account = self.account.objects.get(user=user)
         market = self.market.objects.get(id=market_id)
         user_holding = self.holding.objects.get(user=user, market=market)
+        quantity = serializer.validated_data.get("quantity")
 
-        if user_holding.quantity < serializer.validated_data.get("quantity"):
+        if user_holding.quantity < quantity:
             raise InvalidQuantityException()
 
-        trade_price, price = self._calculate_price(market.market, quantity=serializer.validated_data.get("quantity"))
+        trade_price, price = self._calculate_price(market.market, quantity=quantity)
 
         user_account.krw_balance += price
         user_account.save()
@@ -99,16 +101,16 @@ class CryptoOrderServiceImpl(OrderService):
             user=user,
             order_type=OrderType.SELL.value,
             reserve_type=ReserveType.NOW.value,
-            quantity=serializer.validated_data.get("quantity"),
+            quantity=quantity,
             price=trade_price,
             status=OrderStatus.COMPLETED.value,
         )
         order.save()
 
-        if user_holding.quantity == serializer.validated_data.get("quantity"):
+        if user_holding.quantity == quantity:
             user_holding.delete()
         else:
-            user_holding.quantity -= serializer.validated_data.get("quantity")
+            user_holding.quantity -= quantity
             user_holding.save()
 
         account_history = AccountHistory(
