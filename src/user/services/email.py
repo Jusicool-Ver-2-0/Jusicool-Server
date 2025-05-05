@@ -14,6 +14,7 @@ from user.enums import UserStatus
 from user.exceptions import CodeIsNotValidException
 from user.models import User
 from user.serializers import EmailValidateSerializer, EmailRequestSerializer
+from user.tasks import send_email
 
 
 class EmailService:
@@ -28,32 +29,7 @@ class EmailService:
 
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
-        code = random.randint(100000, 999999)
-
-        cache.set(
-            serializer.validated_data.get("email"),
-            code,
-            timeout=60 * 5
-        )
-
-        context = {
-            "recipient_name": serializer.validated_data.get("email"),
-            "verification_code": code
-        }
-
-        html_content = render_to_string(
-            "../templates/mail_template.html",
-            context
-        )
-
-        email = EmailMultiAlternatives(
-            subject=f"Jusicool mail authentication",
-            body=html_content,
-            to=(serializer.validated_data.get("email"), ),
-            from_email=settings.EMAIL_HOST_USER,
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        send_email.delay(serializer.validated_data.get("email"))
 
     @transaction.atomic
     def validate(self, request: Request, serializer: EmailValidateSerializer) -> None:
