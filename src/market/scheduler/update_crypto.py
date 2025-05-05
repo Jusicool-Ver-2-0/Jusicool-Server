@@ -33,7 +33,8 @@ def update_crypto():
                 "type": MarketType.CRYPTO.value,
                 "korean_name": c["korean_name"],
                 "english_name": c["english_name"],
-            } for c in crypto_market_response.json()
+                "market": c["market"]
+            } for c in crypto_market_response.json() if c["market"].startswith("KRW")
         ],
         many=True
     )

@@ -23,4 +23,7 @@ urlpatterns = [
     path("user", include("user.urls")),
     path("account", include("account.urls")),
     path("exchange", include("exchange.urls")),
+    path("crypto", include("crypto.urls")),
+    path("order", include("order.urls")),
+    path("holding", include("holding.urls")),
 ]
