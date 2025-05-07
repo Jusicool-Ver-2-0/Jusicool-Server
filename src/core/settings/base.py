@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Add-on
     "rest_framework",
-    "django_apscheduler",
+    "django_celery_beat",
     # Apps
     "user",
     "market",
