@@ -11,6 +11,6 @@ app.conf.timezone = "Asia/Seoul"
 app.conf.beat_schedule = {
     "update_crypto": {
         "task": "market.tasks.update_crypto",
-        "schedule": crontab(hour=14, minute=20),
+        "schedule": crontab(hour=0, minute=0),
     }
 }
