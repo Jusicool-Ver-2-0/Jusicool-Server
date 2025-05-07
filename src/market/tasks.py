@@ -44,4 +44,4 @@ def update_crypto():
         ],
         ignore_conflicts=True
     )
-    logger.error("Update Crypto Batch Executed")
+    logger.info("Update Crypto Batch Executed")
