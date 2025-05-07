@@ -1,3 +1,4 @@
+import logging
 import random
 
 from django.conf import settings
@@ -5,6 +6,8 @@ from django.core.cache import cache
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -35,3 +38,5 @@ def send_email(email_address):
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+    logger.info(f"Sending email to {email_address} code: {code} complete")
