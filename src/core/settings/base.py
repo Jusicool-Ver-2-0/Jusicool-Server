@@ -158,3 +158,11 @@ SCHEDULER_DEFAULT = True
 
 # Exchange api base url
 EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")
+
+# Celery
+CELERY_BROKER_URL = f"{os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")}"
+CELERY_RESULT_BACKEND = f"{os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")}"
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"

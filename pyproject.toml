@@ -15,6 +15,7 @@ dependencies = [
     "requests (>=2.32.3,<3.0.0)",
     "gunicorn (>=23.0.0,<24.0.0)",
     "django-apscheduler (>=0.7.0,<0.8.0)",
+    "celery (>=5.5.2,<6.0.0)",
 ]
 
 
