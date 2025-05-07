@@ -8,29 +8,29 @@ from django.template.loader import render_to_string
 
 
 @shared_task
-def send_email(email):
+def send_email(email_address):
     code = random.randint(100000, 999999)
 
     cache.set(
-        email,
+        email_address,
         code,
         timeout=60 * 5
     )
 
     context = {
-        "recipient_name": email,
+        "recipient_name": email_address,
         "verification_code": code
     }
 
     html_content = render_to_string(
-        "../templates/mail_template.html",
+        "mail_template.html",
         context
     )
 
     email = EmailMultiAlternatives(
         subject=f"Jusicool mail authentication",
         body=html_content,
-        to=(email,),
+        to=(email_address,),
         from_email=settings.EMAIL_HOST_USER,
     )
     email.attach_alternative(html_content, "text/html")
