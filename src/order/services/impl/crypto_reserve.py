@@ -43,6 +43,7 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
         )
         order.save()
 
+    @transaction.atomic
     def reserve_sell(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
         market = Market.objects.get(id=market_id)
         user_holding = self.holding.objects.get(user=user, market=market.id)
