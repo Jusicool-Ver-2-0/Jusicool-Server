@@ -35,6 +35,7 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
 
         order = Order(
             user=user,
+            market=market,
             order_type=OrderType.BUY.value,
             reserve_type=ReserveType.RESERVE.value,
             quantity=serializer.validated_data.get("quantity"),
@@ -53,6 +54,7 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
 
         order = Order(
             user=user,
+            market=market,
             order_type=OrderType.SELL.value,
             reserve_type=ReserveType.RESERVE.value,
             quantity=serializer.validated_data.get("quantity"),
