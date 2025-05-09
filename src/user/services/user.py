@@ -23,7 +23,12 @@ class UserService:
         if exist_user:
             raise UserAlreadyExistException()
 
-        serializer.save()
+        User.objects.create_user(
+            email=serializer.validated_data.get("email"),
+            username=serializer.validated_data.get("username"),
+            password=serializer.validated_data.get("password"),
+            school=serializer.validated_data.get("school"),
+        )
 
     @transaction.atomic
     def signin(self, request: Request, serializer: SigninSerializer) -> None:
