@@ -52,9 +52,6 @@ def crypto_reserve_sell_task():
         # 계좌 조회
         user_account = Account.objects.get(user=order.user)
 
-        if user_account.krw_balance < increase_krw:
-            raise ShortageKRWBalanceException()
-
         user_account.krw_balance += increase_krw
         user_account.save()
 
@@ -73,10 +70,10 @@ def crypto_reserve_sell_task():
         ).first()
 
         if holding.quantity < order.quantity:
-            raise InvalidQuantityException()
+            continue
         elif holding.quantity == order.quantity:
             holding.delete()
-            return
+            continue
         elif holding.quantity > order.quantity:
             holding.quantity -= order.quantity
 
