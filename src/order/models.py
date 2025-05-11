@@ -1,6 +1,7 @@
 from django.db import models
 
 from core.models import BaseModel
+from market.models import Market
 from order.enums import ReserveType, OrderType, OrderStatus
 from user.models import User
 
@@ -8,6 +9,7 @@ from user.models import User
 # Create your models here.
 class Order(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    market = models.ForeignKey(Market, on_delete=models.CASCADE, null=True, blank=False)
     order_type = models.CharField(
         choices=OrderType.choices,
         max_length=4
