@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from celery import Celery
 from celery.schedules import crontab
 
@@ -12,5 +14,13 @@ app.conf.beat_schedule = {
     "update_crypto": {
         "task": "market.tasks.update_crypto",
         "schedule": crontab(hour=0, minute=0),
+    },
+    "reserve_buy_task": {
+        "task": "order.tasks.crypto.buy.crypto_reserve_buy_task",
+        "schedule": timedelta(seconds=1),
+    },
+    "crypto_reserve_sell_task": {
+        "task": "order.tasks.crypto.sell.crypto_reserve_sell_task",
+        "schedule": timedelta(seconds=1),
     }
 }

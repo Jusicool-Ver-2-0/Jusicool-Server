@@ -43,6 +43,7 @@ class CryptoOrderServiceImpl(OrderService):
         # 주문 생성
         order = Order(
             user=user,
+            market=market,
             order_type=OrderType.BUY.value,
             reserve_type=ReserveType.NOW.value,
             quantity=quantity,
@@ -99,6 +100,7 @@ class CryptoOrderServiceImpl(OrderService):
 
         order = Order(
             user=user,
+            market=market,
             order_type=OrderType.SELL.value,
             reserve_type=ReserveType.NOW.value,
             quantity=quantity,
