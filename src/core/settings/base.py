@@ -29,7 +29,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     # Add-on
     "rest_framework",
     "django_celery_beat",
+    "django_prometheus",
     # Apps
     "user",
     "market",
@@ -55,6 +55,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware"
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -160,8 +162,8 @@ SCHEDULER_DEFAULT = True
 EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")
 
 # Celery
-CELERY_BROKER_URL = f"{os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")}"
-CELERY_RESULT_BACKEND = f"{os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")}"
+CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')}"
+CELERY_RESULT_BACKEND = f"{os.environ.get('REDIS_URL','redis://127.0.0.1:6379')}"
 
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
