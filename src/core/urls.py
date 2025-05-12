@@ -19,7 +19,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    # Add-On
     path("admin/", admin.site.urls),
+    path("prometheus/", include("django_prometheus.urls")),
+    # Apps
     path("user", include("user.urls")),
     path("account", include("account.urls")),
     path("exchange", include("exchange.urls")),
