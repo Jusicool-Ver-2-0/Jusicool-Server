@@ -1,4 +1,3 @@
-from holding.models import Holding
 from order.enums import ReserveType, OrderStatus
 from order.models import Order
 
