@@ -14,6 +14,7 @@ class CryptoMyOrderView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
-        order_data = CryptoMyOrderService().get(request.user)
+        order_type = request.GET.get("type")
+        order_data = CryptoMyOrderService().get(request.user, order_type)
         serializer = OrderSerializer(order_data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
