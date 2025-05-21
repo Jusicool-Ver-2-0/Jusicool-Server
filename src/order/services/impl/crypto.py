@@ -56,7 +56,7 @@ class CryptoOrderServiceImpl(OrderService):
         exists_holding = Holding.objects.filter(
             user=user,
             market=market,
-            type=MarketType.CRYPTO.value,
+            market_type=MarketType.CRYPTO.value,
         ).first()
         if exists_holding:  # 현재가에 홀딩이 존재한다면 평균값 계산 후 수량 증가
             exists_holding.price = (exists_holding.price + trade_price) / 2
@@ -68,7 +68,7 @@ class CryptoOrderServiceImpl(OrderService):
                 user=user,
                 market=market,
                 quantity=quantity,
-                type=MarketType.CRYPTO.value,
+                market_type=MarketType.CRYPTO.value,
                 price=trade_price,
             ).save()
 

@@ -8,7 +8,7 @@ class Market(BaseModel):
     korean_name = models.CharField(max_length=255, unique=True)
     english_name = models.CharField(max_length=255, unique=True)
     market = models.CharField(max_length=255)
-    type = models.CharField(
+    market_type = models.CharField(
         choices=MarketType.choices,
         max_length=6
     )

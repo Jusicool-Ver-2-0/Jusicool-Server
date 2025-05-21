@@ -11,7 +11,7 @@ class Holding(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    type = models.CharField(choices=MarketType.choices)
+    market_type = models.CharField(choices=MarketType.choices)
     price = models.PositiveBigIntegerField()
 
     class Meta:
