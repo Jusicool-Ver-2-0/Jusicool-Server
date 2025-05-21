@@ -42,7 +42,10 @@ class UserService:
 
         authenticated_user = authenticate(
             request,
-            username=serializer.validated_data.get("username"),
+            username=user.username,
             password=serializer.validated_data.get("password")
         )
+        if authenticated_user is None:
+            raise UserIsNotValidException()
+
         login(request=request, user=authenticated_user)
