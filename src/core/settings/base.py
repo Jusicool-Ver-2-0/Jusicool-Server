@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     "exchange",
     "crypto",
     "order",
-    "holding"
+    "holding",
+    "community",
 ]
 
 REST_FRAMEWORK = {
