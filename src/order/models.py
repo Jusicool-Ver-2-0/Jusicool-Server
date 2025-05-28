@@ -16,7 +16,7 @@ class Order(BaseModel):
     )
     reserve_type = models.CharField(
         choices=ReserveType.choices,
-        max_length=7
+        max_length=9
     )
     quantity = models.PositiveIntegerField()
     status = models.CharField(
