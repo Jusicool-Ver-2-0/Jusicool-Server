@@ -7,4 +7,4 @@ class CryptoListService:
         self.market = market
 
     def get_crypto_list(self):
-        return self.market.objects.filter(type=MarketType.CRYPTO.value)
+        return self.market.objects.filter(market_type=MarketType.CRYPTO.value)
