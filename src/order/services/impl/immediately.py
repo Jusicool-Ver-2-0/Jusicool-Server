@@ -4,6 +4,7 @@ from django.db import transaction
 
 from account.enums import AccountHistoryType
 from account.models import Account, AccountHistory
+from core.kis import kis
 from holding.models import Holding
 from market.enums import MarketType
 from market.models import Market
@@ -14,12 +15,12 @@ from order.serializers import MarketOrderSerializer
 from order.services.order import OrderService
 
 
-class CryptoOrderServiceImpl(OrderService):
+class ImmediatelyOrderServiceImpl(OrderService):
     def __init__(
-            self,
-            account: Account = Account,
-            market: Market = Market,
-            holding: Holding = Holding
+        self,
+        account: Account = Account,
+        market: Market = Market,
+        holding: Holding = Holding
     ):
         self.account = account
         self.market = market
@@ -27,11 +28,15 @@ class CryptoOrderServiceImpl(OrderService):
 
     @transaction.atomic
     def buy(self, user, serializer: MarketOrderSerializer, market_id: int):
-        user_account = self.account.objects.get(user=user)
-        market = Market.objects.get(id=market_id)
-        quantity = serializer.validated_data.get("quantity")
+        user_account = self.account.objects.get(user=user)  # 사용자 계좌
+        market = Market.objects.get(id=market_id)  # 마켓 정보
+        quantity = serializer.validated_data.get("quantity")  # 주문 수량
 
-        trade_price, price = self._calculate_price(market.market, quantity=quantity)
+        trade_price, price = self._calculate_price(
+            market=market.market,
+            quantity=quantity,
+            market_type=market.market_type
+        )
 
         if user_account.krw_balance < price:
             raise ShortageKRWBalanceException()
@@ -44,11 +49,11 @@ class CryptoOrderServiceImpl(OrderService):
         order = Order(
             user=user,
             market=market,
-            order_type=OrderType.BUY.value,
-            reserve_type=ReserveType.NOW.value,
+            order_type=OrderType.BUY,
+            reserve_type=ReserveType.NOW,
             quantity=quantity,
             price=trade_price,
-            status=OrderStatus.COMPLETED.value,
+            status=OrderStatus.COMPLETED,
         )
         order.save()
 
@@ -56,7 +61,7 @@ class CryptoOrderServiceImpl(OrderService):
         exists_holding = Holding.objects.filter(
             user=user,
             market=market,
-            market_type=MarketType.CRYPTO.value,
+            market_type=market.market_type,
         ).first()
         if exists_holding:  # 현재가에 홀딩이 존재한다면 평균값 계산 후 수량 증가
             exists_holding.price = (exists_holding.price + trade_price) / 2
@@ -68,7 +73,7 @@ class CryptoOrderServiceImpl(OrderService):
                 user=user,
                 market=market,
                 quantity=quantity,
-                market_type=MarketType.CRYPTO.value,
+                market_type=market.market_type,
                 price=trade_price,
             ).save()
 
@@ -76,7 +81,7 @@ class CryptoOrderServiceImpl(OrderService):
         account_history = AccountHistory(
             account=user_account,
             order=order,
-            history_type=AccountHistoryType.ORDER.value,
+            history_type=AccountHistoryType.ORDER,
             changed_krw=-price,
             changed_usd=0
         )
@@ -93,7 +98,7 @@ class CryptoOrderServiceImpl(OrderService):
         if user_holding.quantity < quantity:
             raise InvalidQuantityException()
 
-        trade_price, price = self._calculate_price(market.market, quantity=quantity)
+        trade_price, price = self._calculate_price(market.market, quantity=quantity, market_type=market.market_type)
 
         user_account.krw_balance += price
         user_account.save()
@@ -101,11 +106,11 @@ class CryptoOrderServiceImpl(OrderService):
         order = Order(
             user=user,
             market=market,
-            order_type=OrderType.SELL.value,
-            reserve_type=ReserveType.NOW.value,
+            order_type=OrderType.SELL,
+            reserve_type=ReserveType.NOW,
             quantity=quantity,
             price=trade_price,
-            status=OrderStatus.COMPLETED.value,
+            status=OrderStatus.COMPLETED,
         )
         order.save()
 
@@ -118,18 +123,9 @@ class CryptoOrderServiceImpl(OrderService):
         account_history = AccountHistory(
             account=user_account,
             order=order,
-            history_type=AccountHistoryType.ORDER.value,
+            history_type=AccountHistoryType.ORDER,
             changed_krw=price,
             changed_usd=0
         )
         account_history.full_clean()
         account_history.save()
-
-    def _fetch_trade_price(self, market: str) -> float:
-        crypto_trade_price = requests.get(
-            f"{settings.CRYPTO_API_BASE_URL}/ticker",
-            params={"markets": market},
-        )
-        if crypto_trade_price.status_code != 200:
-            raise TradePriceFetchException()
-        return float(crypto_trade_price.json()[0].get("trade_price"))
