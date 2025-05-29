@@ -3,16 +3,18 @@ from django.conf import settings
 from django.db import transaction
 
 from account.models import Account
+from core.kis import kis
 from holding.models import Holding
+from market.enums import MarketType
 from market.models import Market
 from order.enums import OrderType, ReserveType, OrderStatus
 from order.exceptions import ShortageKRWBalanceException, InvalidQuantityException, TradePriceFetchException
 from order.models import Order
 from order.serializers import MarketReserveOrderSerializer
-from order.services.reserve import ReserveOrderService
+from order.services.order import OrderService
 
 
-class CryptoReserveOrderServiceImpl(ReserveOrderService):
+class ReserveOrderServiceImpl(OrderService):
     def __init__(
             self,
             account: Account = Account,
@@ -24,11 +26,15 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
         self.holding = holding
 
     @transaction.atomic
-    def reserve_buy(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
+    def buy(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
         user_account = self.account.objects.get(user=user)
         market = Market.objects.get(id=market_id)
 
-        trade_price, price = self._calculate_price(market.market, quantity=serializer.validated_data.get("quantity"))
+        trade_price, price = self._calculate_price(
+            market.market,
+            quantity=serializer.validated_data.get("quantity"),
+            market_type=market.market_type
+        )
 
         if user_account.krw_balance < trade_price:
             raise ShortageKRWBalanceException()
@@ -36,16 +42,16 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
         order = Order(
             user=user,
             market=market,
-            order_type=OrderType.BUY.value,
-            reserve_type=ReserveType.RESERVE.value,
+            order_type=OrderType.BUY,
+            reserve_type=ReserveType.RESERVE,
             quantity=serializer.validated_data.get("quantity"),
             price=serializer.validated_data.get("price"),  # 예약가
-            status=OrderStatus.PENDING.value,
+            status=OrderStatus.PENDING,
         )
         order.save()
 
     @transaction.atomic
-    def reserve_sell(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
+    def sell(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
         market = Market.objects.get(id=market_id)
         user_holding = self.holding.objects.get(user=user, market=market.id)
 
@@ -55,19 +61,10 @@ class CryptoReserveOrderServiceImpl(ReserveOrderService):
         order = Order(
             user=user,
             market=market,
-            order_type=OrderType.SELL.value,
-            reserve_type=ReserveType.RESERVE.value,
+            order_type=OrderType.SELL,
+            reserve_type=ReserveType.RESERVE,
             quantity=serializer.validated_data.get("quantity"),
             price=serializer.validated_data.get("price"),
-            status=OrderStatus.PENDING.value,
+            status=OrderStatus.PENDING,
         )
         order.save()
-
-    def _fetch_trade_price(self, market: str) -> float:
-        crypto_trade_price = requests.get(
-            f"{settings.CRYPTO_API_BASE_URL}/ticker",
-            params={"markets": market},
-        )
-        if crypto_trade_price.status_code != 200:
-            raise TradePriceFetchException()
-        return float(crypto_trade_price.json()[0].get("trade_price"))

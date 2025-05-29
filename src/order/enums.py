@@ -8,7 +8,7 @@ class OrderType(models.TextChoices):
 
 class ReserveType(models.TextChoices):
     RESERVE = "RESERVE"
-    NOW = "NOW"
+    IMMEDIATE = "IMMEDIATE"
 
 
 class OrderStatus(models.TextChoices):

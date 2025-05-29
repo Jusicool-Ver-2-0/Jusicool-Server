@@ -1,13 +1,19 @@
 from django.urls import path
 
-from order.views.crypto import CryptoBuyView, CryptoSellView
-from order.views.crypto_my import CryptoMyOrderView
-from order.views.crypto_reserve import CryptoReserveBuyView, CryptoReserveSellView
+from order.views.immediately import ImmediatelyBuyView, ImmediatelySellView
+from order.views.my import MyOrderView
+from order.views.reserve import ReserveBuyView, ReserveSellView
+
 
 urlpatterns = [
-    path("/crypto/my", CryptoMyOrderView.as_view()),
-    path("/crypto/buy/<str:crypto_id>", CryptoBuyView.as_view()),
-    path("/crypto/sell/<str:crypto_id>", CryptoSellView.as_view()),
-    path("/crypto/reserve/buy/<str:crypto_id>", CryptoReserveBuyView.as_view()),
-    path("/crypto/reserve/sell/<str:crypto_id>", CryptoReserveSellView.as_view()),
+    # My orders
+    path("/my", MyOrderView.as_view()),
+
+    # Immediately orders
+    path("/buy/<str:crypto_id>", ImmediatelyBuyView.as_view()),
+    path("/sell/<str:crypto_id>", ImmediatelySellView.as_view()),
+
+    # Reserve orders
+    path("/buy/reserve/<str:crypto_id>", ReserveBuyView.as_view()),
+    path("/sell/reserve/<str:crypto_id>", ReserveSellView.as_view()),
 ]

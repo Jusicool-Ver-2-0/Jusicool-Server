@@ -6,15 +6,22 @@ from rest_framework.views import APIView
 
 from core.authentications import CsrfExemptSessionAuthentication
 from order.serializers import OrderSerializer
-from order.services.crypto_my import CryptoMyOrderService
+from order.services.my import CryptoMyOrderService
 
 
-class CryptoMyOrderView(APIView):
+class MyOrderView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
-        order_type = request.GET.get("type")
-        order_data = CryptoMyOrderService().get(request.user, order_type)
-        serializer = OrderSerializer(order_data, many=True)
+        serializer = OrderSerializer(
+            CryptoMyOrderService().get(
+                user=request.user,
+                order_type=request.GET.get("order-type"),
+                order_status=request.GET.get("order-status"),
+                market = request.GET.get("market"),
+                reserve_type=request.GET.get("reserve-type"),
+            ),
+            many=True
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)

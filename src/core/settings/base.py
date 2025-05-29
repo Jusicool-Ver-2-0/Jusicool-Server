@@ -162,6 +162,12 @@ SCHEDULER_DEFAULT = True
 # Exchange api base url
 EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")
 
+# Kis Key
+KIS_APP_KEY = os.environ.get("KIS_APP_KEY")
+KIS_APP_SECRET = os.environ.get("KIS_APP_SECRET")
+KIS_ACCOUNT_CODE = os.environ.get("KIS_ACCOUNT_ID")
+KIS_ACCOUNT_PRODUCT_CODE = os.environ.get("KIS_ACCOUNT_PRODUCT_CODE")
+
 # Celery
 CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')}"
 CELERY_RESULT_BACKEND = None
