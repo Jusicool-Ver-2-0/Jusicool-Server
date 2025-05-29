@@ -169,7 +169,7 @@ KIS_ACCOUNT_CODE = os.environ.get("KIS_ACCOUNT_ID")
 KIS_ACCOUNT_PRODUCT_CODE = os.environ.get("KIS_ACCOUNT_PRODUCT_CODE")
 
 # Celery
-CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')}"
+CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://jusicool-stage-redis:6379')}"
 CELERY_RESULT_BACKEND = None
 
 CELERY_ACCEPT_CONTENT = ["json"]
