@@ -10,9 +10,6 @@ else
   git pull origin main
 fi
 
-docker build . -t jusicool-prod
+docker-compoes up -d --build
 
-docker stop jusicool-prod  || true
-docker rm jusicool-prod || true
-
-docker run -d --name jusicool-prod --env-file /.prod.env --network jusicool -p 3000:8000 jusicool-prod
+docker system prune -f
