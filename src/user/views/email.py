@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.permissions import NotAuthenticated
-from core.throttles import ThirtySecondAnonThrottle
+from core.throttles import OneMinuteAnonThrottle
 from user.serializers import EmailRequestSerializer, EmailValidateSerializer
 from user.services.email import EmailService
 from core.authentications import CsrfExemptSessionAuthentication
@@ -13,7 +13,7 @@ from core.authentications import CsrfExemptSessionAuthentication
 class EmailRequestView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, )
     permission_classes = (NotAuthenticated, )
-    throttle_classes = (ThirtySecondAnonThrottle, )
+    throttle_classes = (OneMinuteAnonThrottle, )
 
     def post(self, request: Request) -> Response:
         serializer = EmailRequestSerializer(data=request.data)

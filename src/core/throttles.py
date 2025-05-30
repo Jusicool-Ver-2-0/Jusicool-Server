@@ -1,5 +1,5 @@
 from rest_framework.throttling import AnonRateThrottle
 
 
-class ThirtySecondAnonThrottle(AnonRateThrottle):
+class OneMinuteAnonThrottle(AnonRateThrottle):
     rate = "1/min"
