@@ -9,7 +9,7 @@ class MarketListService:
 
     def get_list(self, market_type: str = None):
         return cache.get_or_set(
-            f"market_list_{market_type or 'ALL'}",
+            f"market::list::{market_type or 'ALL'}",
             lambda: self._fetch_from_db(market_type),
             timeout=60 * 60 * 24
         )
