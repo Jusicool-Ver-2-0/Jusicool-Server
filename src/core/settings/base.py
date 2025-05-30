@@ -96,11 +96,23 @@ APPEND_SLASH = False
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_NAME"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_HOST"),
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -169,7 +181,7 @@ KIS_ACCOUNT_CODE = os.environ.get("KIS_ACCOUNT_ID")
 KIS_ACCOUNT_PRODUCT_CODE = os.environ.get("KIS_ACCOUNT_PRODUCT_CODE")
 
 # Celery
-CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://jusicool-stage-redis:6379')}"
+CELERY_BROKER_URL = f"{os.environ.get('REDIS_HOST')}"
 CELERY_RESULT_BACKEND = None
 
 CELERY_ACCEPT_CONTENT = ["json"]
