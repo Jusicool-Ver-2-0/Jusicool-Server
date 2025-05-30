@@ -1,0 +1,68 @@
+services:
+  web:
+    container_name: jusicool-web
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ~/.env
+    networks:
+      - jusicool
+    depends_on:
+      - postgres
+      - redis
+
+  celery:
+    container_name: jusicool-celery-worker
+    build: .
+    command:
+      poetry run celery --workdir src -A core.celery worker --loglevel=info
+    env_file:
+      - ~/.env
+    networks:
+      - jusicool
+    depends_on:
+      - postgres
+      - redis
+
+  celery-beat:
+    container_name: jusicool-celery-beat
+    build: .
+    command:
+      poetry run celery --workdir src -A core.celery beat --loglevel=info --scheduler celery.beat:Scheduler
+    env_file:
+      - ~/.env
+    networks:
+      - jusicool
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:15
+    container_name: jusicool-postgres
+    volumes:
+      - jusicool-postgres:/var/lib/postgresql/data
+    networks:
+      - jusicool
+    env_file:
+      - ~/.env
+
+  redis:
+    image: redis:7
+    container_name: jusicool-redis
+    volumes:
+      - jusicool-redis:/data
+    networks:
+      - jusicool
+
+volumes:
+  jusicool-postgres:
+  jusicool-redis:
+
+networks:
+  jusicool:
+    name: jusicool
+    driver: bridge
