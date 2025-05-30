@@ -10,6 +10,6 @@ else
   git pull origin develop
 fi
 
-docker-compoes up -d --build
+docker-compose up -d --build
 
 docker system prune -f
