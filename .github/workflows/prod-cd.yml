@@ -19,7 +19,7 @@ jobs:
           host: ${{ secrets.PROD_SSH_HOST }}
           port: ${{ secrets.PROD_SSH_PORT }}
           username: ${{ secrets.PROD_SSH_USERNAME }}
-          password: ${{ secrets.PROD_SSH_PASSWORD }}
+          key: ${{ secrets.PROD_SSH_KEY }}
           script: |
             mkdir -p /home/ubuntu/prod/Jusicool-Server
             cd /home/ubuntu/prod/Jusicool-Server
