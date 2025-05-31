@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     "crypto",
     "order",
     "holding",
+    "stock"
+    "holding",
     "community",
 ]
 
@@ -96,11 +98,23 @@ APPEND_SLASH = False
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_NAME", "jusicool"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_HOST", "redis://localhost:6379/"),
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -162,10 +176,18 @@ SCHEDULER_DEFAULT = True
 # Exchange api base url
 EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")
 
+# Kis Key
+KIS_APP_KEY = os.environ.get("KIS_APP_KEY")
+KIS_APP_SECRET = os.environ.get("KIS_APP_SECRET")
+KIS_ACCOUNT_CODE = os.environ.get("KIS_ACCOUNT_ID")
+KIS_ACCOUNT_PRODUCT_CODE = os.environ.get("KIS_ACCOUNT_PRODUCT_CODE")
+
 # Celery
-CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')}"
-CELERY_RESULT_BACKEND = f"{os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')}"
+CELERY_BROKER_URL = f"{os.environ.get('REDIS_HOST')}"
+CELERY_RESULT_BACKEND = None
 
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_IGNORE_RESULT = True

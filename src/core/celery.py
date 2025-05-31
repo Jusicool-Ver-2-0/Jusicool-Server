@@ -11,11 +11,15 @@ app.conf.timezone = "Asia/Seoul"
 
 
 app.conf.beat_schedule = {
-    "update_crypto": {
-        "task": "market.tasks.update_crypto",
+    "update_crypto_task": {
+        "task": "market.tasks.crypto.update.update_crypto_task",
         "schedule": crontab(hour=0, minute=0),
     },
-    "reserve_buy_task": {
+    "update_stock_task": {
+        "task": "market.tasks.stock.update.update_stock_task",
+        "schedule": crontab(hour=0, minute=0),
+    },
+    "crypto_reserve_buy_task": {
         "task": "order.tasks.crypto.buy.crypto_reserve_buy_task",
         "schedule": timedelta(seconds=1),
     },

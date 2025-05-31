@@ -66,7 +66,7 @@ def crypto_reserve_sell_task():
         holding = Holding.objects.filter(
             user=order.user,
             market=order.market,
-            type=MarketType.CRYPTO.value,
+            market_type=MarketType.CRYPTO.value,
         ).first()
 
         if holding.quantity < order.quantity:

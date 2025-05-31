@@ -3,6 +3,7 @@ import logging
 import requests
 from celery import shared_task
 from django.conf import settings
+from django.db import transaction
 
 from market.enums import MarketType
 from market.models import Market
@@ -12,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task
-def update_crypto():
+@transaction.atomic
+def update_crypto_task():
     crypto_market_response = requests.get(
         settings.CRYPTO_API_BASE_URL + "/market/all",
     )
@@ -27,7 +29,7 @@ def update_crypto():
     serializer = MarketSerializer(
         data=[
             {
-                "type": MarketType.CRYPTO.value,
+                "market_type": MarketType.CRYPTO.value,
                 "korean_name": c["korean_name"],
                 "english_name": c["english_name"],
                 "market": c["market"]

@@ -13,16 +13,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          host: ${{ secrets.PROD_SSH_HOST }}
+          port: ${{ secrets.PROD_SSH_PORT }}
+          username: ${{ secrets.PROD_SSH_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/prod/Jusicool-Server
+            cd /home/ubuntu/prod/Jusicool-Server
+            
+            if [ ! -d ".git" ]; then
+              git clone -b main https://github.com/Jusicool-Ver-2-0/Jusicool-Server .
+            else
+              git fetch origin main
+              git reset --hard origin/main
+            fi
+            
+            docker-compose down web celery-worker celery-beat || true
+                        
+            docker-compose up -d --build web celery-worker celery-beat
 
-      - name: Deploy with AWS CodeDeploy
-        run: |
-          aws deploy create-deployment \
-            --application-name jusicool \
-            --deployment-group-name prod \
-            --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+            docker system prune -f

@@ -6,7 +6,7 @@ from market.models import Market
 class MarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
-        fields = ("id", "korean_name", "english_name", "market", "type")
+        fields = ("id", "korean_name", "english_name", "market", "market_type")
 
         extra_kwargs = {
             "korean_name": {"validators": []},
