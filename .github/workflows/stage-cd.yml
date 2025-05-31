@@ -21,15 +21,20 @@ jobs:
           username: ${{ secrets.STAGE_SSH_USERNAME }}
           key: ${{ secrets.STAGE_SSH_KEY }}
           script: |
+            set -e
+            
             mkdir -p /home/ubuntu/stage/Jusicool-Server
             cd /home/ubuntu/stage/Jusicool-Server
             
             if [ ! -d ".git" ]; then
               git clone -b develop https://github.com/Jusicool-Ver-2-0/Jusicool-Server .
             else
-              git pull origin develop
+              git fetch origin develop
+              git reset --hard origin/develop
             fi
+            
+            docker-compose down web celery-worker celery-beat || true
                         
-            docker-compose up -d --build
+            docker-compose up -d --build web celery-worker celery-beat
 
             docker system prune -f

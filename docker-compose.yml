@@ -1,6 +1,7 @@
 services:
   web:
     container_name: jusicool-web
+    image: jusicool-web:latest
     build:
       dockerfile: Dockerfile
       context: .
@@ -14,8 +15,9 @@ services:
       - postgres
       - redis
 
-  celery:
+  celery-worker:
     container_name: jusicool-celery-worker
+    image: jusicool-celery-workery:latest
     build: .
     command:
       poetry run celery --workdir src -A core.celery worker --loglevel=info
@@ -29,6 +31,7 @@ services:
 
   celery-beat:
     container_name: jusicool-celery-beat
+    image: jusicool-celery-beat:latest
     build: .
     command:
       poetry run celery --workdir src -A core.celery beat --loglevel=info --scheduler celery.beat:Scheduler
