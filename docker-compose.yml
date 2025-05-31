@@ -15,7 +15,7 @@ services:
       - postgres
       - redis
 
-  celery:
+  celery-worker:
     container_name: jusicool-celery-worker
     image: jusicool-celer-workery:latest
     build: .
