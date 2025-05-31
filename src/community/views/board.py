@@ -9,8 +9,12 @@ from rest_framework import status
 from community.models import BoardPost
 from community.serializers import BoardPostSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from core.authentications import CsrfExemptSessionAuthentication
 
 class BoardPostListCreateAPIView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication, )
+    permission_classes = (IsAuthenticated, )
     def get(self, request: Request):
         posts = BoardPost.objects.all()
         serializer = BoardPostSerializer(posts, many=True)
@@ -19,11 +23,14 @@ class BoardPostListCreateAPIView(APIView):
     def post(self, request: Request):
         serializer = BoardPostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)  # 인증된 사용자 기반
+            serializer.save(author=request.user)  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BoardPostDetailAPIView(APIView):
+    
+    authentication_classes = (CsrfExemptSessionAuthentication, )
+    permission_classes = (IsAuthenticated, )
     def get(self, request: Request, pk: int):
         post = get_object_or_404(BoardPost, pk=pk)
         serializer = BoardPostSerializer(post)

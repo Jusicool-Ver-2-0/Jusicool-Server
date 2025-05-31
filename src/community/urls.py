@@ -7,9 +7,8 @@ from community.views.board import (
 )
 
 urlpatterns = [
-    # path("my", MyAccountView.as_view()),
 
-    path("posts/", BoardPostListCreateAPIView.as_view()),
+    path("/post", BoardPostListCreateAPIView.as_view()),
 
-    path("posts/<int:pk>/", BoardPostDetailAPIView.as_view()),
+    path("/post/<int:pk>/", BoardPostDetailAPIView.as_view()),
 ]
