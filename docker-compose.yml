@@ -17,7 +17,7 @@ services:
 
   celery-worker:
     container_name: jusicool-celery-worker
-    image: jusicool-celer-workery:latest
+    image: jusicool-celery-workery:latest
     build: .
     command:
       poetry run celery --workdir src -A core.celery worker --loglevel=info
