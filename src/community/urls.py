@@ -10,5 +10,5 @@ urlpatterns = [
 
     path("/post", BoardPostListCreateAPIView.as_view()),
 
-    path("/post/<int:pk>/", BoardPostDetailAPIView.as_view()),
+    path("/post/<int:pk>", BoardPostDetailAPIView.as_view()),
 ]
