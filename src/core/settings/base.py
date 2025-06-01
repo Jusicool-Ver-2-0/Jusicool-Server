@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "crypto",
     "order",
     "holding",
-    "stock"
+    "stock",
     "holding",
     "community",
 ]
