@@ -29,4 +29,5 @@ urlpatterns = [
     path("order", include("order.urls")),
     path("holding", include("holding.urls")),
     path("market", include("market.urls")),
+    path("community", include("community.urls")),
 ]
