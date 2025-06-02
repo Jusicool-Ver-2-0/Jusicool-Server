@@ -1,16 +1,14 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY . /app
-
-RUN apt update && apt upgrade -y
+COPY pyproject.toml poetry.lock /app/
 
 RUN pip install --upgrade pip
 
-RUN pip install poetry
+RUN pip install poetry && poetry install --no-root
 
-RUN poetry install --no-root
+COPY . /app
 
 EXPOSE 8000
 
