@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "order",
     "holding",
     "stock",
-    "holding",
     "community",
 ]
 
