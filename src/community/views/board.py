@@ -23,7 +23,7 @@ class BoardPostListCreateAPIView(APIView):
     def post(self, request: Request):
         serializer = BoardPostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)  
+            serializer.save(user=request.user)  
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -37,6 +37,8 @@ class BoardPostDetailAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request: Request, pk: int):
+        if request.user != post.user:
+            return Response({"detail": "권한이 없습니다."}, status=403)
         post = get_object_or_404(BoardPost, pk=pk)
         serializer = BoardPostSerializer(post, data=request.data)
         if serializer.is_valid():
