@@ -16,3 +16,8 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ("id", "market", "order_type", "reserve_type", "quantity", "price", "status")
+
+
+class MyMonthOrderSerializer(serializers.Serializer):
+    rate = serializers.FloatField()
+    order_count = serializers.IntegerField()
