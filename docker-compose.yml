@@ -17,7 +17,7 @@ services:
 
   celery-worker:
     container_name: jusicool-celery-worker
-    image: jusicool-celery-workery:latest
+    image: jusicool-celery-worker:latest
     build: .
     command:
       poetry run celery --workdir src -A core.celery worker --loglevel=info
@@ -61,9 +61,27 @@ services:
     networks:
       - jusicool
 
+  jusicool-grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - jusicool-loki
+      - jusicool-prometheus
+    volumes:
+      - jusicool-grafana:/var/lib/grafana
+    networks:
+      - jusicool
+
+  jusicool-prometheus:
+    image: prom/prometheus
+    networks:
+      - jusicool
+
 volumes:
   jusicool-postgres:
   jusicool-redis:
+  jusicool-grafana:
 
 networks:
   jusicool:
