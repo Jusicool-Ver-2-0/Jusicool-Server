@@ -1,6 +1,7 @@
 from django.urls import path
 
 from order.views.immediately import ImmediatelyBuyView, ImmediatelySellView
+from order.views.month import MonthOrderView
 from order.views.my import MyOrderView
 from order.views.reserve import ReserveBuyView, ReserveSellView
 
@@ -8,6 +9,7 @@ from order.views.reserve import ReserveBuyView, ReserveSellView
 urlpatterns = [
     # My orders
     path("/my", MyOrderView.as_view()),
+    path("/month", MonthOrderView.as_view()),
 
     # Immediately orders
     path("/buy/<str:crypto_id>", ImmediatelyBuyView.as_view()),
