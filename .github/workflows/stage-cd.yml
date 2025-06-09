@@ -23,6 +23,8 @@ jobs:
           script: |
             set -e
             
+            docker system prune -f
+            
             mkdir -p /home/ubuntu/stage/Jusicool-Server
             cd /home/ubuntu/stage/Jusicool-Server
             
