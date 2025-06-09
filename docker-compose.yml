@@ -5,12 +5,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    ports:
-      - "8000:8000"
     env_file:
       - /home/ubuntu/.env
-    networks:
-      - jusicool
+    network_mode: host
     depends_on:
       - postgres
       - redis
@@ -23,8 +20,7 @@ services:
       poetry run celery --workdir src -A core.celery worker --loglevel=info
     env_file:
       - /home/ubuntu/.env
-    networks:
-      - jusicool
+    network_mode: host
     depends_on:
       - postgres
       - redis
@@ -37,8 +33,7 @@ services:
       poetry run celery --workdir src -A core.celery beat --loglevel=info --scheduler celery.beat:Scheduler
     env_file:
       - /home/ubuntu/.env
-    networks:
-      - jusicool
+    network_mode: host
     depends_on:
       - postgres
       - redis
@@ -48,8 +43,7 @@ services:
     container_name: jusicool-postgres
     volumes:
       - jusicool-postgres:/var/lib/postgresql/data
-    networks:
-      - jusicool
+    network_mode: host
     env_file:
       - /home/ubuntu/.env
 
@@ -58,8 +52,7 @@ services:
     container_name: jusicool-redis
     volumes:
       - jusicool-redis:/data
-    networks:
-      - jusicool
+    network_mode: host
 
   jusicool-grafana:
     image: grafana/grafana
@@ -69,20 +62,13 @@ services:
       - jusicool-prometheus
     volumes:
       - jusicool-grafana:/var/lib/grafana
-    networks:
-      - jusicool
+    network_mode: host
 
   jusicool-prometheus:
     image: prom/prometheus
-    networks:
-      - jusicool
+    network_mode: host
 
 volumes:
   jusicool-postgres:
   jusicool-redis:
   jusicool-grafana:
-
-networks:
-  jusicool:
-    name: jusicool
-    driver: bridge
