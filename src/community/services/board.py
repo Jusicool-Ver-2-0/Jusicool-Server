@@ -14,8 +14,7 @@ class BoardPostService:
 
     @staticmethod
     @transaction.atomic
-    def create_post(data, user):
-        serializer = BoardPostSerializer(data=data)
+    def create_post(serializer, user):
         serializer.is_valid(raise_exception=True)
         return serializer.save(user=user)
 
@@ -25,14 +24,11 @@ class BoardPostService:
 
     @staticmethod
     @transaction.atomic
-    def update_post(pk, data):
-        post = get_object_or_404(BoardPost, pk=pk)
-        serializer = BoardPostSerializer(post, data=data, partial=True)
+    def update_post(serializer):
         serializer.is_valid(raise_exception=True)
         return serializer.save()
 
     @staticmethod
     @transaction.atomic
-    def delete_post(pk, user):
-        post = get_object_or_404(BoardPost, pk=pk, user=user)
+    def delete_post(post):
         post.delete()

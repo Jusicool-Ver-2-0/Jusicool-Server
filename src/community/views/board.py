@@ -20,8 +20,7 @@ class BoardPostListCreateAPIView(APIView):
 
     def post(self, request: Request):
         serializer = BoardPostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        post = BoardPostService.create_post(serializer.validated_data, request.user)
+        post = BoardPostService.create_post(serializer, request.user)
         return Response(BoardPostSerializer(post).data, status=status.HTTP_201_CREATED)
 
 class BoardPostDetailAPIView(APIView):
@@ -35,14 +34,13 @@ class BoardPostDetailAPIView(APIView):
 
     def put(self, request: Request, pk: int):
         post = BoardPostService.get_post(pk,request.user)
-
         serializer = BoardPostSerializer(post, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        updated_post = BoardPostService.update_post(post, serializer.validated_data)
+        updated_post = BoardPostService.update_post(serializer)
         return Response(BoardPostSerializer(updated_post).data)
   
-
     def delete(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk,request.user)
+        post = BoardPostService.get_post(pk, request.user)
+        BoardPostService.delete_post(post) 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
