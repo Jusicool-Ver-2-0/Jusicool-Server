@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.authentications import CsrfExemptSessionAuthentication
-from holding.serializers import MyAssetSerializer
+from holding.serializers import HoldingSerializer
 from holding.services.my import MyHoldingService
 
 
@@ -13,6 +13,5 @@ class MyHoldingView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def get(self, request: Request) -> Response:
-        my_holding = MyHoldingService().get_my_holding(request.user)
-        serializer = MyAssetSerializer(instance=my_holding)
+        serializer = HoldingSerializer(MyHoldingService().get_my_holding(request.user), many=True)
         return Response(serializer.data)

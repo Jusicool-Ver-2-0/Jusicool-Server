@@ -12,7 +12,4 @@ class MyHoldingService:
         self.account = account
 
     def get_my_holding(self, user):
-        return {
-            "account": self.account.objects.filter(user=user).first(),
-            "holding": self.holding.objects.filter(user=user).prefetch_related("market")
-        }
+        return self.holding.objects.filter(user=user).select_related("market")
