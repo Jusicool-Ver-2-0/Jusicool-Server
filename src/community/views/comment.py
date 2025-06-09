@@ -6,17 +6,17 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from core.authentications import CsrfExemptSessionAuthentication
 from community.serializers import BoardCommentSerializer
-from services.commnet import BoardCommentService
+from services.comment import BoardCommentService
 
 class BoardCommentListAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, post_id):
-        post = BoardCommentService.get_post(post_id)
-        comments = BoardCommentService.list_comments(post)
+        comments = BoardCommentService.list_comments(post_id)
         serializer = BoardCommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class BoardCommentCreateAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -25,7 +25,10 @@ class BoardCommentCreateAPIView(APIView):
     def post(self, request, post_id):
         post = BoardCommentService.get_post(post_id)
         serializer = BoardCommentSerializer(data=request.data)
-        if serializer.is_valid():
-            comment = BoardCommentService.create_comment(serializer.validated_data, request.user, post)
-            return Response(BoardCommentSerializer(comment).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        
+        comment = BoardCommentService.create_comment(serializer.validated_data, request.user, post)
+        
+        response_serializer = BoardCommentSerializer(comment)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+

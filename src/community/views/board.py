@@ -20,10 +20,9 @@ class BoardPostListCreateAPIView(APIView):
 
     def post(self, request: Request):
         serializer = BoardPostSerializer(data=request.data)
-        if serializer.is_valid():
-            post = BoardPostService.create_post(serializer.validated_data, request.user)
-            return Response(BoardPostSerializer(post).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        post = BoardPostService.create_post(serializer.validated_data, request.user)
+        return Response(BoardPostSerializer(post).data, status=status.HTTP_201_CREATED)
 
 class BoardPostDetailAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -35,19 +34,15 @@ class BoardPostDetailAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk)
-        if request.user != post.user:
-            return Response({"detail": "권한이 없습니다."}, status=403)
+        post = BoardPostService.get_post(pk,request.user)
 
         serializer = BoardPostSerializer(post, data=request.data)
-        if serializer.is_valid():
-            updated_post = BoardPostService.update_post(post, serializer.validated_data)
-            return Response(BoardPostSerializer(updated_post).data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        updated_post = BoardPostService.update_post(post, serializer.validated_data)
+        return Response(BoardPostSerializer(updated_post).data)
+  
 
     def delete(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk)
-        if request.user != post.user:
-            return Response({"detail": "권한이 없습니다."}, status=403)
-        BoardPostService.delete_post(post)
+        post = BoardPostService.get_post(pk,request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+

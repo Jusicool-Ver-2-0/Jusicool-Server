@@ -20,8 +20,8 @@ class BoardPostService:
         return serializer.save(user=user)
 
     @staticmethod
-    def get_post(pk):
-        return get_object_or_404(BoardPost, pk=pk)
+    def get_post(pk, user):
+        return get_object_or_404(BoardPost, pk=pk, user=user)
 
     @staticmethod
     @transaction.atomic
@@ -33,6 +33,6 @@ class BoardPostService:
 
     @staticmethod
     @transaction.atomic
-    def delete_post(pk):
-        post = get_object_or_404(BoardPost, pk=pk)
+    def delete_post(pk, user):
+        post = get_object_or_404(BoardPost, pk=pk, user=user)
         post.delete()

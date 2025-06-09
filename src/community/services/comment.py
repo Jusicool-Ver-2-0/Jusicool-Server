@@ -9,8 +9,10 @@ class BoardCommentService:
         return get_object_or_404(BoardPost, id=post_id)
 
     @staticmethod
-    def list_comments(post):
+    def list_comments(post_id):
+        post = get_object_or_404(BoardPost, id=post_id)
         return post.comments.all()
+
 
     @staticmethod
     @transaction.atomic
