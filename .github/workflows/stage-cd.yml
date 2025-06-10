@@ -22,9 +22,7 @@ jobs:
           password: ${{ secrets.STAGE_SSH_PASSWORD }}
           script: |
             set -e
-            
-            docker system prune -f
-            
+                        
             mkdir -p /home/ubuntu/stage/Jusicool-Server
             cd /home/ubuntu/stage/Jusicool-Server
             
@@ -35,8 +33,9 @@ jobs:
               git reset --hard origin/develop
             fi
             
-            docker-compose down web celery-worker celery-beat || true
-                        
-            docker-compose up -d --build web celery-worker celery-beat
+            docker-compose stop web celery-worker celery-beat || true
+            docker-compose rm -f web celery-worker celery-beat || true
 
             docker system prune -f
+
+            docker-compose up -d --build web celery-worker celery-beat

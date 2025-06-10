@@ -21,6 +21,8 @@ jobs:
           username: ${{ secrets.PROD_SSH_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
           script: |
+            set -e
+            
             mkdir -p /home/ubuntu/prod/Jusicool-Server
             cd /home/ubuntu/prod/Jusicool-Server
             
@@ -31,8 +33,9 @@ jobs:
               git reset --hard origin/main
             fi
             
-            docker-compose down web celery-worker celery-beat || true
+            docker-compose stop web celery-worker celery-beat || true
+            docker-compose rm -f web celery-worker celery-beat || true
                         
-            docker-compose up -d --build web celery-worker celery-beat
-
             docker system prune -f
+            
+            docker-compose up -d --build web celery-worker celery-beat
