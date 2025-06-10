@@ -29,7 +29,7 @@ def update_crypto_task():
     serializer = MarketSerializer(
         data=[
             {
-                "market_type": MarketType.CRYPTO.value,
+                "market_type": MarketType.CRYPTO,
                 "korean_name": c["korean_name"],
                 "english_name": c["english_name"],
                 "market": c["market"]
@@ -44,6 +44,7 @@ def update_crypto_task():
             Market(**s)
             for s in serializer.data
         ],
-        ignore_conflicts=True
+        ignore_conflicts=True,
+        batch_size=50
     )
     logger.info("Update Crypto Batch Executed")
