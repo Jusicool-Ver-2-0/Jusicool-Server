@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from core.authentications import CsrfExemptSessionAuthentication
 from community.serializers import BoardCommentSerializer
-from services.comment import BoardCommentService
+from community.services.comment import BoardCommentService
 
 class BoardCommentListAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)

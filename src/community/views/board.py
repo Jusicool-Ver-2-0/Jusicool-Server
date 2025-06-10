@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from core.authentications import CsrfExemptSessionAuthentication
 from community.serializers import BoardPostSerializer
-from services.board import BoardPostService
+from community.services.board import BoardPostService
 
 class BoardPostListCreateAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
