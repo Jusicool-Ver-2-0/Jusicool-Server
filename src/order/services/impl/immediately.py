@@ -1,6 +1,7 @@
 import requests
 from django.conf import settings
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.enums import AccountHistoryType
 from account.models import Account, AccountHistory
@@ -28,8 +29,8 @@ class ImmediatelyOrderServiceImpl(OrderService):
 
     @transaction.atomic
     def buy(self, user, serializer: MarketOrderSerializer, market_id: int):
-        user_account = self.account.objects.get(user=user)  # 사용자 계좌
-        market = Market.objects.get(id=market_id)  # 마켓 정보
+        user_account = get_object_or_404(Account, user=user)  # 사용자 계좌
+        market = get_object_or_404(Market, id=market_id)  # 마켓 정보
         quantity = serializer.validated_data.get("quantity")  # 주문 수량
 
         trade_price, price = self._calculate_price(
@@ -58,7 +59,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
         order.save()
 
         # 홀딩 조회
-        exists_holding = Holding.objects.filter(
+        exists_holding = self.holding.objects.filter(
             user=user,
             market=market,
             market_type=market.market_type,
@@ -90,9 +91,9 @@ class ImmediatelyOrderServiceImpl(OrderService):
 
     @transaction.atomic
     def sell(self, user, serializer: MarketOrderSerializer, market_id: int):
-        user_account = self.account.objects.get(user=user)
-        market = self.market.objects.get(id=market_id)
-        user_holding = self.holding.objects.get(user=user, market=market)
+        user_account = get_object_or_404(Account, user=user)
+        market = get_object_or_404(Market, id=market_id)
+        user_holding = get_object_or_404(Holding, user=user, market=market)
         quantity = serializer.validated_data.get("quantity")
 
         if user_holding.quantity < quantity:

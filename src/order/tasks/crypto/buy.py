@@ -2,6 +2,7 @@ import requests
 from celery import shared_task
 from django.conf import settings
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.enums import AccountHistoryType
 from account.models import Account, AccountHistory
@@ -50,7 +51,7 @@ def crypto_reserve_buy_task():
         decrease_krw = trade_price * order.quantity
 
         # 계좌 조회
-        user_account = Account.objects.get(user=order.user)
+        user_account = get_object_or_404(Account, user=order.user)
 
         if user_account.krw_balance < decrease_krw:
             raise ShortageKRWBalanceException()

@@ -3,6 +3,7 @@ from decimal import Decimal
 import requests
 from django.conf import settings
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.enums import AccountHistoryType
 from exchange.enums import ExchangeType
@@ -28,7 +29,7 @@ class ExchangeService:
             self._to_usd(user, serializer)
 
     def _to_krw(self, user, serializer: ExchangeSerializer):
-        user_account = self.account.objects.get(user=user)
+        user_account = get_object_or_404(Account, user=user)
         krw_exchange_rate = self._get_krw_exchange_rate()
 
         # 환전
@@ -52,7 +53,7 @@ class ExchangeService:
         ).save()
 
     def _to_usd(self, user, serializer: ExchangeSerializer):
-        user_account = self.account.objects.get(user=user)
+        user_account = get_object_or_404(Account, user=user)
         krw_exchange_rate = self._get_krw_exchange_rate()
 
         # 환전

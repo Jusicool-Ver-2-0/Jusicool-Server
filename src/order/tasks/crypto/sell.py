@@ -2,6 +2,7 @@ import requests
 from celery import shared_task
 from django.conf import settings
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.enums import AccountHistoryType
 from account.models import Account, AccountHistory
@@ -50,7 +51,7 @@ def crypto_reserve_sell_task():
         increase_krw = trade_price * order.quantity
 
         # 계좌 조회
-        user_account = Account.objects.get(user=order.user)
+        user_account = get_object_or_404(Account, user=order.user)
 
         user_account.krw_balance += increase_krw
         user_account.save()
@@ -66,7 +67,7 @@ def crypto_reserve_sell_task():
         holding = Holding.objects.filter(
             user=order.user,
             market=order.market,
-            market_type=MarketType.CRYPTO.value,
+            market_type=MarketType.CRYPTO,
         ).first()
 
         if holding.quantity < order.quantity:
