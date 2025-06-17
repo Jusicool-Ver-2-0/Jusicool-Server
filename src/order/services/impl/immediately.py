@@ -12,7 +12,7 @@ from market.models import Market
 from order.enums import OrderType, OrderStatus, ReserveType
 from order.exceptions import ShortageKRWBalanceException, InvalidQuantityException, TradePriceFetchException
 from order.models import Order
-from order.serializers import MarketOrderSerializer
+from order.serializers import MarketOrderSerializer, OrderPriceSerializer
 from order.services.order import OrderService
 
 
@@ -89,6 +89,8 @@ class ImmediatelyOrderServiceImpl(OrderService):
         account_history.full_clean()
         account_history.save()
 
+        return OrderPriceSerializer({'price': price}).data
+
     @transaction.atomic
     def sell(self, user, serializer: MarketOrderSerializer, market_id: int):
         user_account = get_object_or_404(Account, user=user)
@@ -130,3 +132,5 @@ class ImmediatelyOrderServiceImpl(OrderService):
         )
         account_history.full_clean()
         account_history.save()
+
+        return OrderPriceSerializer({'price': price}).data
