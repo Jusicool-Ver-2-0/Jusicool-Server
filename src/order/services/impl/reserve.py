@@ -1,6 +1,7 @@
 import requests
 from django.conf import settings
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.models import Account
 from core.kis import kis
@@ -27,8 +28,8 @@ class ReserveOrderServiceImpl(OrderService):
 
     @transaction.atomic
     def buy(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
-        user_account = self.account.objects.get(user=user)
-        market = Market.objects.get(id=market_id)
+        user_account = get_object_or_404(Account, user=user)
+        market = get_object_or_404(Market, id=market_id)
 
         trade_price, price = self._calculate_price(
             market.market,
@@ -52,8 +53,8 @@ class ReserveOrderServiceImpl(OrderService):
 
     @transaction.atomic
     def sell(self, user, serializer: MarketReserveOrderSerializer, market_id: int):
-        market = Market.objects.get(id=market_id)
-        user_holding = self.holding.objects.get(user=user, market=market.id)
+        market = get_object_or_404(Market, id=market_id)
+        user_holding = get_object_or_404(Holding, user=user, market=market.id)
 
         if user_holding.quantity < serializer.validated_data.get("quantity"):
             raise InvalidQuantityException()

@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from account.models import Account
 
@@ -9,4 +10,4 @@ class MyAccountService:
 
     @transaction.atomic
     def get_my_account(self, user) -> Account:
-        return self.account.objects.get(user=user)
+        return get_object_or_404(Account, user=user)
