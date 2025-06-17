@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.authentications import CsrfExemptSessionAuthentication
-from order.serializers import MarketOrderSerializer
+from order.serializers import MarketOrderSerializer, OrderPriceSerializer
 from order.services.impl.immediately import ImmediatelyOrderServiceImpl
 
 
@@ -16,9 +16,10 @@ class ImmediatelyBuyView(APIView):
     def post(self, request: Request, crypto_id: int) -> Response:
         serializer = MarketOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ImmediatelyOrderServiceImpl().buy(user=request.user, serializer=serializer, market_id=crypto_id)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+        return Response(
+            ImmediatelyOrderServiceImpl().buy(user=request.user, serializer=serializer, market_id=crypto_id),
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 class ImmediatelySellView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, )
