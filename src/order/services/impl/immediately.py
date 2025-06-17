@@ -131,3 +131,5 @@ class ImmediatelyOrderServiceImpl(OrderService):
         )
         account_history.full_clean()
         account_history.save()
+
+        return OrderPriceSerializer({'price': price}).data
