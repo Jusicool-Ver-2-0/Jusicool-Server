@@ -24,9 +24,9 @@ class ImmediatelyOrderServiceImpl(OrderService):
         self.holding = holding
 
     @transaction.atomic
-    def buy(self, user, serializer: MarketOrderSerializer, market_id: int):
+    def buy(self, user, serializer: MarketOrderSerializer, market: str):
         user_account = get_object_or_404(Account, user=user)  # 사용자 계좌
-        market = get_object_or_404(Market, id=market_id)  # 마켓 정보
+        market = get_object_or_404(Market, market=market)  # 마켓 정보
         quantity = serializer.validated_data.get("quantity")  # 주문 수량
 
         trade_price, price = self._calculate_price(
@@ -88,9 +88,9 @@ class ImmediatelyOrderServiceImpl(OrderService):
         return OrderPriceSerializer({'price': price}).data
 
     @transaction.atomic
-    def sell(self, user, serializer: MarketOrderSerializer, market_id: int):
+    def sell(self, user, serializer: MarketOrderSerializer, market: str):
         user_account = get_object_or_404(Account, user=user)
-        market = get_object_or_404(Market, id=market_id)
+        market = get_object_or_404(Market, market=market)
         user_holding = get_object_or_404(Holding, user=user, market=market)
         quantity = serializer.validated_data.get("quantity")
 

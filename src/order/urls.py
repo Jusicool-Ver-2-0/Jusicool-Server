@@ -12,10 +12,10 @@ urlpatterns = [
     path("/month", MonthOrderView.as_view()),
 
     # Immediately orders
-    path("/buy/<str:crypto_id>", ImmediatelyBuyView.as_view()),
-    path("/sell/<str:crypto_id>", ImmediatelySellView.as_view()),
+    path("/buy/<str:market>", ImmediatelyBuyView.as_view()),
+    path("/sell/<str:market>", ImmediatelySellView.as_view()),
 
     # Reserve orders
-    path("/buy/reserve/<str:crypto_id>", ReserveBuyView.as_view()),
-    path("/sell/reserve/<str:crypto_id>", ReserveSellView.as_view()),
+    path("/buy/reserve/<str:market>", ReserveBuyView.as_view()),
+    path("/sell/reserve/<str:market>", ReserveSellView.as_view()),
 ]
