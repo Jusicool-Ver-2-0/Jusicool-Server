@@ -13,10 +13,10 @@ class ReserveBuyView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request: Request, crypto_id: int) -> Response:
+    def post(self, request: Request, market: str) -> Response:
         serializer = MarketReserveOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ReserveOrderServiceImpl().buy(request.user, serializer, crypto_id)
+        ReserveOrderServiceImpl().buy(request.user, serializer, market=market)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -24,8 +24,8 @@ class ReserveSellView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request: Request, crypto_id: int) -> Response:
+    def post(self, request: Request, market: str) -> Response:
         serializer = MarketReserveOrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ReserveOrderServiceImpl().sell(request.user, serializer, crypto_id)
+        ReserveOrderServiceImpl().sell(request.user, serializer, market=market)
         return Response(status=status.HTTP_204_NO_CONTENT)
