@@ -2,6 +2,7 @@ from django.urls import path
 
 from order.views.immediately import ImmediatelyBuyView, ImmediatelySellView
 from order.views.month import MonthOrderView
+from order.views.monthly import MonthlyView
 from order.views.my import MyOrderView
 from order.views.reserve import ReserveBuyView, ReserveSellView
 
@@ -18,4 +19,7 @@ urlpatterns = [
     # Reserve orders
     path("/buy/reserve/<str:market>", ReserveBuyView.as_view()),
     path("/sell/reserve/<str:market>", ReserveSellView.as_view()),
+
+    # Monthly rate
+    path('/month/rate', MonthlyView.as_view()),
 ]

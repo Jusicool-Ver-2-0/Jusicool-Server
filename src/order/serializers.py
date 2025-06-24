@@ -25,3 +25,7 @@ class MyMonthOrderSerializer(serializers.Serializer):
 
 class OrderPriceSerializer(serializers.Serializer):
     price = serializers.IntegerField()
+
+
+class MonthlyPercentSerializer(serializers.Serializer):
+    rate = serializers.FloatField()

@@ -18,3 +18,9 @@ class TradePriceFetchException(APIException):
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     default_detail = 'Trade price fetch error'
     default_code = 'trade_error'
+
+
+class NotFountOrderException(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = 'Order not found'
+    default_code = 'not_found_order'
