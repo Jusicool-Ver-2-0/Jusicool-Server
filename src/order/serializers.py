@@ -25,3 +25,14 @@ class MyMonthOrderSerializer(serializers.Serializer):
 
 class OrderPriceSerializer(serializers.Serializer):
     price = serializers.IntegerField()
+
+
+class MonthlyMarketRateSerializer(serializers.Serializer):
+    market = serializers.CharField()
+    korean_name = serializers.CharField()
+    rate = serializers.FloatField()
+
+
+class MonthlyRateSerializer(serializers.Serializer):
+    monthly_rate = serializers.FloatField()
+    markets = MonthlyMarketRateSerializer(many=True)
