@@ -18,3 +18,11 @@ class MonthOrderView(APIView):
             MonthOrderService().get_month_orders(request.user)
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class MonthRateView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request: Request) -> Response:
+        return Response(MonthOrderService().get_month_rate(request.user).data, status=status.HTTP_200_OK)
