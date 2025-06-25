@@ -23,12 +23,13 @@ def crypto_reserve_buy_task():
     reserve_buy_order = Order.objects.filter(
         order_type=OrderType.BUY,
         reserve_type=ReserveType.RESERVE,
-        status=OrderStatus.PENDING
+        status=OrderStatus.PENDING,
+        market__market_type=MarketType.CRYPTO,
     )
     if not reserve_buy_order:
         return
 
-    markets = ",".join([str(m.market.market) for m in reserve_buy_order])
+    markets = ",".join(set([str(m.market.market) for m in reserve_buy_order]))
 
     crypto_trade_price = requests.get(
         f"{settings.CRYPTO_API_BASE_URL}/ticker",
