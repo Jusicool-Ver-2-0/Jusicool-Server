@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from celery import shared_task
 from django.conf import settings
@@ -12,6 +14,7 @@ from order.enums import OrderType, ReserveType, OrderStatus
 from order.exceptions import TradePriceFetchException, ShortageKRWBalanceException
 from order.models import Order
 
+logger = logging.getLogger(__name__)
 
 @shared_task
 @transaction.atomic
@@ -32,6 +35,8 @@ def crypto_reserve_buy_task():
         params={"markets": markets},
     )
     if crypto_trade_price.status_code != 200:
+        logger.error(f"API Response Status Code: {crypto_trade_price.status_code}")
+        logger.error(f"API Response Content: {crypto_trade_price.text}")
         raise TradePriceFetchException()
 
     # 검색 최적화를 위한 인덱스
