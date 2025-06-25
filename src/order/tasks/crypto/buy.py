@@ -35,6 +35,7 @@ def crypto_reserve_buy_task():
         params={"markets": markets},
     )
     if crypto_trade_price.status_code != 200:
+        logger.error(f"Failed to fetch crypto trade prices. market: {markets}")
         logger.error(f"API Response Status Code: {crypto_trade_price.status_code}")
         logger.error(f"API Response Content: {crypto_trade_price.text}")
         raise TradePriceFetchException()
