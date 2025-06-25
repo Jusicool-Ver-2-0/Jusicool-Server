@@ -15,12 +15,9 @@ class MyOrderView(APIView):
 
     def get(self, request: Request) -> Response:
         serializer = OrderSerializer(
-            CryptoMyOrderService().get(
+            CryptoMyOrderService().get_order(
                 user=request.user,
-                order_type=request.GET.get("order-type"),
-                order_status=request.GET.get("order-status"),
-                market = request.GET.get("market"),
-                reserve_type=request.GET.get("reserve-type"),
+                _type=request.GET.get("type"),
             ),
             many=True
         )

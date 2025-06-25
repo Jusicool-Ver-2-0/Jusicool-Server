@@ -13,11 +13,16 @@ class CryptoMyOrderService:
         self.order = order
         self.market = market
 
-    def get(self, user, order_type, order_status, market, reserve_type):
-        return self.order.objects.filter(
-            user=user,
-            reserve_type=ReserveType(reserve_type),
-            market__market_type=MarketType(market),
-            order_type=OrderType(order_type),
-            status=OrderStatus(order_status),
-        )
+    def get_order(self, user, _type):
+        if _type == "COMPLETED":
+            queryset = self.order.objects.filter(
+                user=user, status=OrderStatus.COMPLETED
+            )
+        elif _type == "RESERVE":
+            queryset = self.order.objects.filter(
+                user=user, reserve_type=ReserveType.RESERVE, status=OrderStatus.PENDING
+            )
+        else:
+            queryset = self.order.objects.filter(user=user)
+
+        return queryset
