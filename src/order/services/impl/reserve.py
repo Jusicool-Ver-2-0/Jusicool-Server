@@ -42,7 +42,7 @@ class ReserveOrderServiceImpl(OrderService):
             order_type=OrderType.BUY,
             reserve_type=ReserveType.RESERVE,
             quantity=serializer.validated_data.get("quantity"),
-            price=serializer.validated_data.get("price"),  # 예약가
+            reserve_price=serializer.validated_data.get("price"),
             status=OrderStatus.PENDING,
         )
         order.save()
@@ -61,7 +61,7 @@ class ReserveOrderServiceImpl(OrderService):
             order_type=OrderType.SELL,
             reserve_type=ReserveType.RESERVE,
             quantity=serializer.validated_data.get("quantity"),
-            price=serializer.validated_data.get("price"),
+            execute_price=serializer.validated_data.get("price"),
             status=OrderStatus.PENDING,
         )
         order.save()

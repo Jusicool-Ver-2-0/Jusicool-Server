@@ -42,7 +42,7 @@ def crypto_reserve_sell_task():
         trade_price = crypto_trade_price_index.get(order.market.market).get("trade_price")
 
         # 예약 채결 조건이 아닌경우 pass
-        if trade_price < order.price:
+        if trade_price < order.reserve_price:
             continue
 
         order.status = OrderStatus.COMPLETED
