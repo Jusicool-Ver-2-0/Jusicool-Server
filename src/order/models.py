@@ -23,7 +23,8 @@ class Order(BaseModel):
         choices=OrderStatus.choices,
         max_length=9
     )
-    price = models.PositiveBigIntegerField()
+    reserve_price = models.PositiveBigIntegerField(null=True, blank=True)
+    execute_price = models.PositiveBigIntegerField(null=True, blank=True)
 
     class Meta:
         db_table = 'order'

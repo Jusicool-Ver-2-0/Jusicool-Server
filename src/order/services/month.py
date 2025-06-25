@@ -21,10 +21,10 @@ class MonthOrderService:
             status=OrderStatus.COMPLETED
         )
 
-        sell_price = order.filter(order_type=OrderType.SELL).aggregate(Sum("price"))
-        buy_price = order.filter(order_type=OrderType.BUY).aggregate(Sum("price"))
+        sell_price = order.filter(order_type=OrderType.SELL).aggregate(Sum("execute_price"))
+        buy_price = order.filter(order_type=OrderType.BUY).aggregate(Sum("execute_price"))
 
-        rate = sell_price.get("price__sum") or 0 - buy_price.get("price__sum") or 0
+        rate = sell_price.get("execute_price__sum") or 0 - buy_price.get("execute_price__sum") or 0
 
         return {
             "rate": rate,
@@ -53,13 +53,13 @@ class MonthOrderService:
         buy_price = completed_orders.filter(
             order_type=OrderType.BUY
         ).aggregate(
-            sum=Sum('price')
+            sum=Sum('execute_price')
         ).get('sum') or 0
 
         sell_price = completed_orders.filter(
             order_type=OrderType.SELL
         ).aggregate(
-            sum=Sum('price')
+            sum=Sum('execute_price')
         ).get('sum') or 0
 
         if buy_price == 0:
@@ -74,13 +74,13 @@ class MonthOrderService:
             market_buy_price = market_orders.filter(
                 order_type=OrderType.BUY
             ).aggregate(
-                sum=Sum('price')
+                sum=Sum('execute_price')
             ).get('sum') or 0
 
             market_sell_price = market_orders.filter(
                 order_type=OrderType.SELL
             ).aggregate(
-                sum=Sum('price')
+                sum=Sum('execute_price')
             ).get('sum') or 0
 
             if market_buy_price > 0:

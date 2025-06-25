@@ -49,7 +49,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order_type=OrderType.BUY,
             reserve_type=ReserveType.IMMEDIATE,
             quantity=quantity,
-            price=trade_price,
+            reserve_price=trade_price,
             status=OrderStatus.COMPLETED,
         )
         order.save()
@@ -60,6 +60,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
             market=market,
             market_type=market.market_type,
         ).first()
+
         if exists_holding:  # 현재가에 홀딩이 존재한다면 평균값 계산 후 수량 증가
             exists_holding.price = (exists_holding.price + trade_price) / 2
             exists_holding.quantity += quantity
@@ -108,7 +109,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order_type=OrderType.SELL,
             reserve_type=ReserveType.IMMEDIATE,
             quantity=quantity,
-            price=trade_price,
+            reserve_price=trade_price,
             status=OrderStatus.COMPLETED,
         )
         order.save()
