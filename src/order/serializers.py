@@ -13,9 +13,14 @@ class MarketReserveOrderSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    market = serializers.SerializerMethodField()
+
     class Meta:
         model = Order
         fields = ("id", "market", "order_type", "reserve_type", "quantity", "price", "status")
+
+    def get_market(self, obj):
+        return obj.market.korean_name
 
 
 class MyMonthOrderSerializer(serializers.Serializer):
