@@ -93,7 +93,8 @@ class MonthOrderService:
             market_rates.append({
                 'market': market_obj.market,
                 'korean_name': market_obj.korean_name,
-                'rate': round(m_rate, 2)
+                'rate': round(m_rate, 2),
+                'day': market_obj.updated_at
             })
 
         return MonthlyRateSerializer(
