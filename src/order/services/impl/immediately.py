@@ -49,7 +49,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order_type=OrderType.BUY,
             reserve_type=ReserveType.IMMEDIATE,
             quantity=quantity,
-            reserve_price=trade_price,
+            execute_price=trade_price,
             status=OrderStatus.COMPLETED,
         )
         order.save()
@@ -109,7 +109,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order_type=OrderType.SELL,
             reserve_type=ReserveType.IMMEDIATE,
             quantity=quantity,
-            reserve_price=trade_price,
+            execute_price=trade_price,
             status=OrderStatus.COMPLETED,
         )
         order.save()
