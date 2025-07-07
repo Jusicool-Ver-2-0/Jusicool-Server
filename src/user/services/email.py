@@ -11,7 +11,7 @@ from rest_framework.request import Request
 
 from account.models import Account
 from user.enums import UserStatus
-from user.exceptions import CodeIsNotValidException
+from user.exceptions import CodeIsNotValidException, UserAlreadyExistException
 from user.models import User
 from user.serializers import EmailValidateSerializer, EmailRequestSerializer
 from user.tasks import send_email
@@ -29,23 +29,28 @@ class EmailService:
 
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
-        send_email.delay(serializer.validated_data.get("email"))
+        email = serializer.validated_data.get("email")
+
+        if self.user.objects.filter(email=email).exists():
+            raise UserAlreadyExistException()
+
+        self.user.objects.create(email=email)
+
+        send_email.delay(email)
 
     @transaction.atomic
     def validate(self, request: Request, serializer: EmailValidateSerializer) -> None:
-        code = cache.get(serializer.validated_data.get("email"))
+        email = serializer.validated_data.get("email")
+
+        code = cache.get(email)
         if code != serializer.validated_data.get("code"):
             raise CodeIsNotValidException()
 
         user: User = get_object_or_404(
             self.user,
-            email=serializer.validated_data.get("email")
+            email=email
         )
         user.status = UserStatus.ACTIVE
         user.save()
 
-        self.account.objects.create(user=user)
-
-        cache.delete(serializer.validated_data.get("email"))
-
-        login(request=request, user=user)
+        cache.delete(email)
