@@ -24,7 +24,7 @@ class MonthOrderService:
         sell_price = order.filter(order_type=OrderType.SELL).aggregate(Sum("execute_price"))
         buy_price = order.filter(order_type=OrderType.BUY).aggregate(Sum("execute_price"))
 
-        rate = sell_price.get("execute_price__sum") or 0 - buy_price.get("execute_price__sum") or 0
+        rate = sell_price.get("execute_price__sum", 0) - buy_price.get("execute_price__sum", 0)
 
         return {
             "rate": rate,
