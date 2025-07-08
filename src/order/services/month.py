@@ -1,6 +1,7 @@
 from datetime import date, time, datetime
 
-from django.db.models import Sum
+from django.db.models import Sum, QuerySet
+from django.shortcuts import get_list_or_404
 from django.utils import timezone
 
 from order.enums import OrderStatus, OrderType
@@ -36,70 +37,43 @@ class MonthOrderService:
         start = date(today.year, today.month, 1)
         end = datetime.combine(today, time.max)
 
-        month_order = Order.objects.filter(
+        month_orders = Order.objects.filter(
             user=user,
             created_at__gte=start,
             created_at__lte=end,
             status=OrderStatus.COMPLETED
         )
 
-        sold_markets = month_order.filter(order_type=OrderType.SELL).values_list('market_id', flat=True).distinct()
-
-        completed_orders = month_order.filter(market_id__in=sold_markets)
-
-        if not completed_orders:
+        sold_markets = month_orders.filter(order_type=OrderType.SELL).values_list('market_id', flat=True).distinct()
+        completed_orders = month_orders.filter(market_id__in=sold_markets)
+        if not completed_orders.exists():
             raise NotFountOrderException()
 
-        buy_price = completed_orders.filter(
-            order_type=OrderType.BUY
-        ).aggregate(
-            sum=Sum('execute_price')
-        ).get('sum') or 0
-
-        sell_price = completed_orders.filter(
-            order_type=OrderType.SELL
-        ).aggregate(
-            sum=Sum('execute_price')
-        ).get('sum') or 0
-
-        if buy_price == 0:
-            rate = 0
-        else:
-            rate = ((sell_price - buy_price) / buy_price) * 100
+        buy_price = self._agg_sum(completed_orders, OrderType.BUY)
+        sell_price = self._agg_sum(completed_orders, OrderType.SELL)
+        rate = ((sell_price - buy_price) / buy_price) * 100 if buy_price else 0
 
         market_rates = []
         for market_id in sold_markets:
             market_orders = completed_orders.filter(market_id=market_id)
-
-            market_buy_price = market_orders.filter(
-                order_type=OrderType.BUY
-            ).aggregate(
-                sum=Sum('execute_price')
-            ).get('sum') or 0
-
-            market_sell_price = market_orders.filter(
-                order_type=OrderType.SELL
-            ).aggregate(
-                sum=Sum('execute_price')
-            ).get('sum') or 0
-
-            if market_buy_price > 0:
-                m_rate = ((market_sell_price - market_buy_price) / market_buy_price) * 100
-            else:
-                m_rate = 0
-
+            market_buy = self._agg_sum(market_orders, OrderType.BUY)
+            market_sell = self._agg_sum(market_orders, OrderType.SELL)
+            m_rate = ((market_sell - market_buy) / market_buy) * 100 if market_buy else 0
             market_obj = market_orders.first().market
-
             market_rates.append({
                 'market': market_obj.market,
                 'korean_name': market_obj.korean_name,
                 'rate': round(m_rate, 2),
+                'proceed': market_sell - market_buy,
                 'day': market_obj.updated_at
             })
 
-        return MonthlyRateSerializer(
-            {
-                'monthly_rate': round(rate, 2),
-                'markets': market_rates
-            }
-        )
+        return MonthlyRateSerializer({
+            'monthly_rate': round(rate, 2),
+            'markets': market_rates
+        })
+
+    def _agg_sum(self, qs: QuerySet, order_type: str):
+        f = qs.filter(order_type=order_type)
+        a = f.aggregate(sum=Sum('execute_price'))
+        return a.get('sum') or 0

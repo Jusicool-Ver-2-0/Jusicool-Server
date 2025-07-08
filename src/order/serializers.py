@@ -36,6 +36,7 @@ class MonthlyMarketRateSerializer(serializers.Serializer):
     market = serializers.CharField()
     korean_name = serializers.CharField()
     rate = serializers.FloatField()
+    proceed = serializers.IntegerField()
     day = serializers.DateTimeField(format="%Y-%m-%d")
 
 
