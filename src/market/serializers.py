@@ -12,3 +12,7 @@ class MarketSerializer(serializers.ModelSerializer):
             "korean_name": {"validators": []},
             "english_name": {"validators": []},
         }
+
+
+class MarketPredictSerializer(serializers.Serializer):
+    result = serializers.BooleanField()
