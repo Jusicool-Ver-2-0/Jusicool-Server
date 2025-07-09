@@ -32,5 +32,7 @@ class AccountHistory(BaseModel):
 
     def clean(self):
         # Type이 Order이지만 order이 Null일때
-        if (self.history_type == AccountHistoryType.ORDER.value) and (self.order is None):
+        if (self.history_type == AccountHistoryType.ORDER.value) and (
+            self.order is None
+        ):
             raise ValidationError({"error": "AccountHistoryType.ORDER must be set"})

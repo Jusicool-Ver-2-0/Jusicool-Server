@@ -6,18 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0001_initial'),
+        ("user", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='school',
+            model_name="user",
+            name="school",
             field=models.CharField(max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='status',
-            field=models.CharField(choices=[('ACTIVE', 'Active'), ('INACTIVE', 'Inactive'), ('PENDING', 'Pending')], default='PENDING', max_length=8, null=True),
+            model_name="user",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("ACTIVE", "Active"),
+                    ("INACTIVE", "Inactive"),
+                    ("PENDING", "Pending"),
+                ],
+                default="PENDING",
+                max_length=8,
+                null=True,
+            ),
         ),
     ]

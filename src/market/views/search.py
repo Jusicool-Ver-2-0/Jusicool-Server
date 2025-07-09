@@ -10,14 +10,13 @@ from market.services.search import MarketSearchService
 
 
 class MarketSearchView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     market_search_service = MarketSearchService()
 
     def get(self, request: Request) -> Response:
         serializer = MarketSerializer(
-            self.market_search_service.search(request.GET.get('query')),
-            many=True
+            self.market_search_service.search(request.GET.get("query")), many=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)

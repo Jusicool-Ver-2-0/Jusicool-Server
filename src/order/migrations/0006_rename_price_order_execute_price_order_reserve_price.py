@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0005_alter_order_reserve_type'),
+        ("order", "0005_alter_order_reserve_type"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='order',
-            old_name='price',
-            new_name='execute_price',
+            model_name="order",
+            old_name="price",
+            new_name="execute_price",
         ),
         migrations.AddField(
-            model_name='order',
-            name='reserve_price',
+            model_name="order",
+            name="reserve_price",
             field=models.PositiveBigIntegerField(blank=True, null=True),
         ),
     ]

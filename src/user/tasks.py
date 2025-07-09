@@ -14,21 +14,11 @@ logger = logging.getLogger(__name__)
 def send_email(email_address):
     code = random.randint(100000, 999999)
 
-    cache.set(
-        email_address,
-        code,
-        timeout=60 * 5
-    )
+    cache.set(email_address, code, timeout=60 * 5)
 
-    context = {
-        "recipient_name": email_address,
-        "verification_code": code
-    }
+    context = {"recipient_name": email_address, "verification_code": code}
 
-    html_content = render_to_string(
-        "mail_template.html",
-        context
-    )
+    html_content = render_to_string("mail_template.html", context)
 
     email = EmailMultiAlternatives(
         subject=f"Jusicool mail authentication",

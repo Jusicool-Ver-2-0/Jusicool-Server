@@ -15,4 +15,4 @@ class Holding(BaseModel):
     price = models.PositiveBigIntegerField()
 
     class Meta:
-        db_table = 'holding'
+        db_table = "holding"

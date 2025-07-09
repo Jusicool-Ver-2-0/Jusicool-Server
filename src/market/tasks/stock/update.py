@@ -23,10 +23,6 @@ def update_stock_task():
             )
         )
 
-    Market.objects.bulk_create(
-        stock_list,
-        batch_size=50,
-        ignore_conflicts=True
-    )
+    Market.objects.bulk_create(stock_list, batch_size=50, ignore_conflicts=True)
 
     logger.info("Update Stock Batch Executed")

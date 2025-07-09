@@ -19,6 +19,6 @@ class MyOrderView(APIView):
                 user=request.user,
                 _type=request.GET.get("type"),
             ),
-            many=True
+            many=True,
         )
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -10,21 +10,12 @@ from user.models import User
 class Order(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     market = models.ForeignKey(Market, on_delete=models.CASCADE, null=True, blank=False)
-    order_type = models.CharField(
-        choices=OrderType.choices,
-        max_length=4
-    )
-    reserve_type = models.CharField(
-        choices=ReserveType.choices,
-        max_length=9
-    )
+    order_type = models.CharField(choices=OrderType.choices, max_length=4)
+    reserve_type = models.CharField(choices=ReserveType.choices, max_length=9)
     quantity = models.PositiveIntegerField()
-    status = models.CharField(
-        choices=OrderStatus.choices,
-        max_length=9
-    )
+    status = models.CharField(choices=OrderStatus.choices, max_length=9)
     reserve_price = models.PositiveBigIntegerField(null=True, blank=True)
     execute_price = models.PositiveBigIntegerField(null=True, blank=True)
 
     class Meta:
-        db_table = 'order'
+        db_table = "order"

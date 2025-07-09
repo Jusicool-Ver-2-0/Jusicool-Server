@@ -6,18 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('market', '0002_market_market'),
+        ("market", "0002_market_market"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='market',
-            name='type',
+            model_name="market",
+            name="type",
         ),
         migrations.AddField(
-            model_name='market',
-            name='market_type',
-            field=models.CharField(choices=[('CRYPTO', 'Crypto'), ('KOSPI', 'Kospi'), ('KOSDAQ', 'Kosdaq')], default='CRYPTO', max_length=6),
+            model_name="market",
+            name="market_type",
+            field=models.CharField(
+                choices=[
+                    ("CRYPTO", "Crypto"),
+                    ("KOSPI", "Kospi"),
+                    ("KOSDAQ", "Kosdaq"),
+                ],
+                default="CRYPTO",
+                max_length=6,
+            ),
             preserve_default=False,
         ),
     ]

@@ -9,10 +9,12 @@ from market.services.predict import MarketPredictService
 
 
 class MarketPredictView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     market_predict_service = MarketPredictService()
 
     def get(self, request: Request, market_code: str) -> Response:
-        return Response(self.market_predict_service.predict(market_code), status=status.HTTP_200_OK)
+        return Response(
+            self.market_predict_service.predict(market_code), status=status.HTTP_200_OK
+        )

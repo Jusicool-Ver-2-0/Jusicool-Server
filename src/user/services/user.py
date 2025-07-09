@@ -12,7 +12,7 @@ from user.serializers import SignupSerializer, SigninSerializer
 
 class UserService:
     def __init__(self, user: User = User, account: Account = Account):
-        self.user= user
+        self.user = user
         self.account = account
 
     @transaction.atomic
@@ -23,7 +23,9 @@ class UserService:
         if exist_user:
             raise UserAlreadyExistException()
 
-        user = get_object_or_404(self.user, email=serializer.validated_data.get("email"))
+        user = get_object_or_404(
+            self.user, email=serializer.validated_data.get("email")
+        )
 
         user.username = serializer.validated_data.get("username")
         user.set_password(serializer.validated_data.get("password"))
@@ -35,8 +37,7 @@ class UserService:
     @transaction.atomic
     def signin(self, request: Request, serializer: SigninSerializer) -> None:
         user: User = get_object_or_404(
-            self.user,
-            email=serializer.validated_data.get("email")
+            self.user, email=serializer.validated_data.get("email")
         )
 
         if user.status != UserStatus.ACTIVE:
@@ -45,7 +46,7 @@ class UserService:
         authenticated_user = authenticate(
             request,
             username=user.username,
-            password=serializer.validated_data.get("password")
+            password=serializer.validated_data.get("password"),
         )
         if authenticated_user is None:
             raise UserIsNotValidException()

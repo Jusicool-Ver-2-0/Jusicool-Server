@@ -3,7 +3,7 @@
 from community.models import BoardPost
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from community.serializers import BoardPostSerializer  
+from community.serializers import BoardPostSerializer
 
 
 class BoardPostService:

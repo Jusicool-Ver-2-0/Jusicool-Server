@@ -9,14 +9,12 @@ from market.services.list import MarketListService
 
 
 class MarketListView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
         serializer = MarketSerializer(
-            instance=MarketListService().get_list(
-                market_type=request.GET.get("type")
-            ),
-            many=True
+            instance=MarketListService().get_list(market_type=request.GET.get("type")),
+            many=True,
         )
         return Response(serializer.data, status=200)

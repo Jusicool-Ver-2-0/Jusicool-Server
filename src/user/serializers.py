@@ -25,7 +25,4 @@ class EmailRequestSerializer(serializers.Serializer):
 
 class EmailValidateSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    code = serializers.IntegerField(
-        min_value=100000,
-        max_value=999999
-    )
+    code = serializers.IntegerField(min_value=100000, max_value=999999)

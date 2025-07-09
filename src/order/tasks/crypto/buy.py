@@ -16,6 +16,7 @@ from order.models import Order
 
 logger = logging.getLogger(__name__)
 
+
 @shared_task
 @transaction.atomic
 def crypto_reserve_buy_task():
@@ -46,7 +47,9 @@ def crypto_reserve_buy_task():
 
     for order in reserve_buy_order:
         # order.market 의 현재가 파싱
-        trade_price = crypto_trade_price_index.get(order.market.market).get("trade_price")
+        trade_price = crypto_trade_price_index.get(order.market.market).get(
+            "trade_price"
+        )
 
         # 예약 채결 조건이 아닌경우 pass
         if trade_price > order.reserve_price:

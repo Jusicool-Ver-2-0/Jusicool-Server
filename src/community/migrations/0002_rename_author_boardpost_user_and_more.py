@@ -7,18 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('community', '0001_initial'),
+        ("community", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='boardpost',
-            old_name='author',
-            new_name='user',
+            model_name="boardpost",
+            old_name="author",
+            new_name="user",
         ),
         migrations.AlterField(
-            model_name='boardpost',
-            name='created_at',
-            field=models.DateTimeField(db_index=True, default=django.utils.timezone.now),
+            model_name="boardpost",
+            name="created_at",
+            field=models.DateTimeField(
+                db_index=True, default=django.utils.timezone.now
+            ),
         ),
     ]

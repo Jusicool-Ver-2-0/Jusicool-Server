@@ -19,13 +19,12 @@ from user.tasks import send_email
 
 class EmailService:
     def __init__(
-            self,
-            user: User = User,
-            account: Account = Account,
+        self,
+        user: User = User,
+        account: Account = Account,
     ):
         self.user = user
         self.account = account
-
 
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
@@ -46,10 +45,7 @@ class EmailService:
         if code != serializer.validated_data.get("code"):
             raise CodeIsNotValidException()
 
-        user: User = get_object_or_404(
-            self.user,
-            email=email
-        )
+        user: User = get_object_or_404(self.user, email=email)
         user.status = UserStatus.ACTIVE
         user.save()
 

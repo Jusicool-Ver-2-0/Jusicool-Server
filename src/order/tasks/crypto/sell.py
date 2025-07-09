@@ -9,7 +9,11 @@ from account.models import Account, AccountHistory
 from holding.models import Holding
 from market.enums import MarketType
 from order.enums import OrderType, ReserveType, OrderStatus
-from order.exceptions import TradePriceFetchException, ShortageKRWBalanceException, InvalidQuantityException
+from order.exceptions import (
+    TradePriceFetchException,
+    ShortageKRWBalanceException,
+    InvalidQuantityException,
+)
 from order.models import Order
 
 
@@ -20,7 +24,7 @@ def crypto_reserve_sell_task():
     reserve_buy_order = Order.objects.filter(
         order_type=OrderType.SELL,
         reserve_type=ReserveType.RESERVE,
-        status=OrderStatus.PENDING
+        status=OrderStatus.PENDING,
     )
     if not reserve_buy_order:
         return
@@ -39,7 +43,9 @@ def crypto_reserve_sell_task():
 
     for order in reserve_buy_order:
         # order.market 의 현재가 파싱
-        trade_price = crypto_trade_price_index.get(order.market.market).get("trade_price")
+        trade_price = crypto_trade_price_index.get(order.market.market).get(
+            "trade_price"
+        )
 
         # 예약 채결 조건이 아닌경우 pass
         if trade_price < order.reserve_price:

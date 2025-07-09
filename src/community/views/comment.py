@@ -8,6 +8,7 @@ from core.authentications import CsrfExemptSessionAuthentication
 from community.serializers import BoardCommentSerializer
 from community.services.comment import BoardCommentService
 
+
 class BoardCommentListAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -26,9 +27,10 @@ class BoardCommentCreateAPIView(APIView):
         post = BoardCommentService.get_post(post_id)
         serializer = BoardCommentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        comment = BoardCommentService.create_comment(serializer.validated_data, request.user, post)
-        
+
+        comment = BoardCommentService.create_comment(
+            serializer.validated_data, request.user, post
+        )
+
         response_serializer = BoardCommentSerializer(comment)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
-

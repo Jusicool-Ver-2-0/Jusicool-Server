@@ -11,7 +11,7 @@ class MarketListService:
         return cache.get_or_set(
             f"market::list::{market_type or 'ALL'}",
             lambda: self._fetch_from_db(market_type),
-            timeout=60 * 60 * 24
+            timeout=60 * 60 * 24,
         )
 
     def _fetch_from_db(self, market_type: str = None):

@@ -17,7 +17,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ("id", "market", "order_type", "reserve_type", "quantity", "execute_price", "reserve_price", "status")
+        fields = (
+            "id",
+            "market",
+            "order_type",
+            "reserve_type",
+            "quantity",
+            "execute_price",
+            "reserve_price",
+            "status",
+        )
 
     def get_market(self, obj):
         return obj.market.korean_name
