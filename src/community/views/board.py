@@ -1,46 +1,57 @@
-# views/board.py
-
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+
+from community.serializers import (
+    BoardSerializer,
+    CommentSerializer,
+    BoardDetailSerializer,
+)
 from core.authentications import CsrfExemptSessionAuthentication
-from community.serializers import BoardPostSerializer
-from community.services.board import BoardPostService
+from community.services.board import BoardService
 
 
-class BoardPostListCreateAPIView(APIView):
+class BoardView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request: Request):
-        posts = BoardPostService.list_posts()
-        serializer = BoardPostSerializer(posts, many=True)
-        return Response(serializer.data)
+    board_service = BoardService()
 
-    def post(self, request: Request):
-        serializer = BoardPostSerializer(data=request.data)
-        post = BoardPostService.create_post(serializer, request.user)
-        return Response(BoardPostSerializer(post).data, status=status.HTTP_201_CREATED)
+    def get(self, request: Request, market: str) -> Response:
+        boards = self.board_service.get_board_list_by_market(market)
+        serializer = BoardSerializer(boards, many=True, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request: Request, market: str) -> Response:
+        serializer = BoardSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.board_service.create(
+            user=request.user, market=market, serializer=serializer
+        )
+        return Response(status=status.HTTP_201_CREATED)
 
 
-class BoardPostDetailAPIView(APIView):
+class BoardDetailView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk)
-        serializer = BoardPostSerializer(post)
-        return Response(serializer.data)
+    board_service = BoardService()
 
-    def put(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk, request.user)
-        serializer = BoardPostSerializer(post, data=request.data)
-        updated_post = BoardPostService.update_post(serializer)
-        return Response(BoardPostSerializer(updated_post).data)
+    def get(self, request: Request, market: str, board_id: int) -> Response:
+        board = self.board_service.get_board_detail(market, board_id)
+        serializer = BoardDetailSerializer(board, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk, request.user)
-        BoardPostService.delete_post(post)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def post(self, request: Request, market: str, board_id: int) -> Response:
+        serializer = CommentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.board_service.create_comment(
+            user=request.user, market=market, board_id=board_id, serializer=serializer
+        )
+        return Response(status=status.HTTP_201_CREATED)
+
+    def patch(self, request: Request, market: str, board_id: int) -> Response:
+        self.board_service.like(user=request.user, market=market, board_id=board_id)
+        return Response(status=status.HTTP_200_OK)
