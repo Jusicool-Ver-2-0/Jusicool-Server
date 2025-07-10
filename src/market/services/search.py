@@ -9,7 +9,7 @@ class MarketSearchService:
 
     def search(self, query: str):
         return self.market.objects.filter(
-            Q(korean_name__icontains=query) |
-            Q(english_name__icontains=query) |
-            Q(market__icontains=query)
+            Q(korean_name__icontains=query)
+            | Q(english_name__icontains=query)
+            | Q(market__icontains=query)
         )

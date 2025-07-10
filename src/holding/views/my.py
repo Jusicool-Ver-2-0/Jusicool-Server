@@ -9,9 +9,11 @@ from holding.services.my import MyHoldingService
 
 
 class MyHoldingView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
-        serializer = HoldingSerializer(MyHoldingService().get_my_holding(request.user), many=True)
+        serializer = HoldingSerializer(
+            MyHoldingService().get_my_holding(request.user), many=True
+        )
         return Response(serializer.data)

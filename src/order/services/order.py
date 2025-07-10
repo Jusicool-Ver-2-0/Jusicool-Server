@@ -17,7 +17,9 @@ class OrderService(ABC):
     def sell(self):
         raise NotImplementedError
 
-    def _calculate_price(self, market: str, quantity: float, market_type: str) -> (float, float):
+    def _calculate_price(
+        self, market: str, quantity: float, market_type: str
+    ) -> (float, float):
         crypto_trade_price = float
         if market_type == MarketType.CRYPTO:
             crypto_trade_price = self._fetch_crypto_trade_price(market)

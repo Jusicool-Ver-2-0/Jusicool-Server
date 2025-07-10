@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0004_order_market'),
+        ("order", "0004_order_market"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='order',
-            name='reserve_type',
-            field=models.CharField(choices=[('RESERVE', 'Reserve'), ('IMMEDIATE', 'Immediate')], max_length=9),
+            model_name="order",
+            name="reserve_type",
+            field=models.CharField(
+                choices=[("RESERVE", "Reserve"), ("IMMEDIATE", "Immediate")],
+                max_length=9,
+            ),
         ),
     ]

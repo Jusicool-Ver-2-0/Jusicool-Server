@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.db import transaction
 from community.models import BoardPost, BoardComment
 
+
 class BoardCommentService:
 
     @staticmethod
@@ -12,7 +13,6 @@ class BoardCommentService:
     def list_comments(post_id):
         post = get_object_or_404(BoardPost, id=post_id)
         return post.comments.all()
-
 
     @staticmethod
     @transaction.atomic

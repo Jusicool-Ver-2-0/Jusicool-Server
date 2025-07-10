@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('market', '0004_alter_market_english_name'),
+        ("market", "0004_alter_market_english_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='market',
-            name='market_type',
-            field=models.CharField(choices=[('CRYPTO', 'Crypto'), ('STOCK', 'Stock')], max_length=6),
+            model_name="market",
+            name="market_type",
+            field=models.CharField(
+                choices=[("CRYPTO", "Crypto"), ("STOCK", "Stock")], max_length=6
+            ),
         ),
     ]

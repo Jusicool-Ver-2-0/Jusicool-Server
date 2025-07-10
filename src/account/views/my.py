@@ -10,8 +10,8 @@ from core.authentications import CsrfExemptSessionAuthentication
 
 
 class MyAccountView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
         serializer = AccountSerializer(

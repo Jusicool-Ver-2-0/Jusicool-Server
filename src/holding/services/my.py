@@ -3,11 +3,7 @@ from holding.models import Holding
 
 
 class MyHoldingService:
-    def __init__(
-            self,
-            holding: Holding = Holding,
-            account: Account = Account
-    ):
+    def __init__(self, holding: Holding = Holding, account: Account = Account):
         self.holding = holding
         self.account = account
 

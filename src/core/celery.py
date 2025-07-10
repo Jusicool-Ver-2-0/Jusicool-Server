@@ -5,7 +5,7 @@ from celery.schedules import crontab
 
 
 app = Celery("jusicool")
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 app.conf.timezone = "Asia/Seoul"
 
@@ -26,5 +26,5 @@ app.conf.beat_schedule = {
     "crypto_reserve_sell_task": {
         "task": "order.tasks.crypto.sell.crypto_reserve_sell_task",
         "schedule": timedelta(seconds=1),
-    }
+    },
 }

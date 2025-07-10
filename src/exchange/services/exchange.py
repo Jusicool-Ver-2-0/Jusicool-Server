@@ -14,15 +14,17 @@ from exchange.serializers import ExchangeSerializer
 
 class ExchangeService:
     def __init__(
-            self,
-            account: Account = Account,
-            account_history: AccountHistory = AccountHistory,
+        self,
+        account: Account = Account,
+        account_history: AccountHistory = AccountHistory,
     ):
         self.account = account
         self.account_history = account_history
 
     @transaction.atomic
-    def exchange(self, user, exchange_type: ExchangeType, serializer: ExchangeSerializer):
+    def exchange(
+        self, user, exchange_type: ExchangeType, serializer: ExchangeSerializer
+    ):
         if exchange_type == ExchangeType.KRW.value:
             self._to_krw(user, serializer)
         elif exchange_type == ExchangeType.USD.value:
@@ -78,7 +80,5 @@ class ExchangeService:
 
     @staticmethod
     def _get_krw_exchange_rate():
-        exchange_rate = requests.get(
-            f"{settings.EXCHANGE_API_BASE_URL}/latest/USD"
-        )
+        exchange_rate = requests.get(f"{settings.EXCHANGE_API_BASE_URL}/latest/USD")
         return exchange_rate.json().get("rates").get("KRW")

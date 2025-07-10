@@ -17,7 +17,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
         self,
         account: Account = Account,
         market: Market = Market,
-        holding: Holding = Holding
+        holding: Holding = Holding,
     ):
         self.account = account
         self.market = market
@@ -30,9 +30,7 @@ class ImmediatelyOrderServiceImpl(OrderService):
         quantity = serializer.validated_data.get("quantity")  # 주문 수량
 
         trade_price, price = self._calculate_price(
-            market=market.market,
-            quantity=quantity,
-            market_type=market.market_type
+            market=market.market, quantity=quantity, market_type=market.market_type
         )
 
         if user_account.krw_balance < price:
@@ -81,12 +79,12 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order=order,
             history_type=AccountHistoryType.ORDER,
             changed_krw=-price,
-            changed_usd=0
+            changed_usd=0,
         )
         account_history.full_clean()
         account_history.save()
 
-        return OrderPriceSerializer({'price': price}).data
+        return OrderPriceSerializer({"price": price}).data
 
     @transaction.atomic
     def sell(self, user, serializer: MarketOrderSerializer, market: str):
@@ -98,7 +96,9 @@ class ImmediatelyOrderServiceImpl(OrderService):
         if user_holding.quantity < quantity:
             raise InvalidQuantityException()
 
-        trade_price, price = self._calculate_price(market.market, quantity=quantity, market_type=market.market_type)
+        trade_price, price = self._calculate_price(
+            market.market, quantity=quantity, market_type=market.market_type
+        )
 
         user_account.krw_balance += price
         user_account.save()
@@ -125,9 +125,9 @@ class ImmediatelyOrderServiceImpl(OrderService):
             order=order,
             history_type=AccountHistoryType.ORDER,
             changed_krw=price,
-            changed_usd=0
+            changed_usd=0,
         )
         account_history.full_clean()
         account_history.save()
 
-        return OrderPriceSerializer({'price': price}).data
+        return OrderPriceSerializer({"price": price}).data

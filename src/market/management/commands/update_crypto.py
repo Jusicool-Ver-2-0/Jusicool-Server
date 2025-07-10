@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 from market.tasks.crypto.update import update_crypto_task
 
+
 class Command(BaseCommand):
-    help = 'Run update_crypto_task Celery task'
+    help = "Run update_crypto_task Celery task"
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.NOTICE("Sending update_crypto_task to Celery..."))

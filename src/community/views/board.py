@@ -9,6 +9,7 @@ from core.authentications import CsrfExemptSessionAuthentication
 from community.serializers import BoardPostSerializer
 from community.services.board import BoardPostService
 
+
 class BoardPostListCreateAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -23,6 +24,7 @@ class BoardPostListCreateAPIView(APIView):
         post = BoardPostService.create_post(serializer, request.user)
         return Response(BoardPostSerializer(post).data, status=status.HTTP_201_CREATED)
 
+
 class BoardPostDetailAPIView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -33,14 +35,12 @@ class BoardPostDetailAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request: Request, pk: int):
-        post = BoardPostService.get_post(pk,request.user)
+        post = BoardPostService.get_post(pk, request.user)
         serializer = BoardPostSerializer(post, data=request.data)
         updated_post = BoardPostService.update_post(serializer)
         return Response(BoardPostSerializer(updated_post).data)
-  
+
     def delete(self, request: Request, pk: int):
         post = BoardPostService.get_post(pk, request.user)
-        BoardPostService.delete_post(post) 
+        BoardPostService.delete_post(post)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-

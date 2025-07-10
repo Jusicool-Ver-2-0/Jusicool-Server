@@ -32,19 +32,16 @@ def update_crypto_task():
                 "market_type": MarketType.CRYPTO,
                 "korean_name": c["korean_name"],
                 "english_name": c["english_name"],
-                "market": c["market"]
-            } for c in crypto_market_response.json() if c["market"].startswith("KRW")
+                "market": c["market"],
+            }
+            for c in crypto_market_response.json()
+            if c["market"].startswith("KRW")
         ],
-        many=True
+        many=True,
     )
     serializer.is_valid(raise_exception=True)
 
     Market.objects.bulk_create(
-        [
-            Market(**s)
-            for s in serializer.data
-        ],
-        ignore_conflicts=True,
-        batch_size=50
+        [Market(**s) for s in serializer.data], ignore_conflicts=True, batch_size=50
     )
     logger.info("Update Crypto Batch Executed")

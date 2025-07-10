@@ -9,7 +9,7 @@ from core.authentications import CsrfExemptSessionAuthentication
 
 
 class SigninView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
 
     def post(self, request: Request) -> Response:
         serializer = SigninSerializer(data=request.data)

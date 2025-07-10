@@ -17,10 +17,7 @@ class User(BaseModel, AbstractUser):
     )
 
     status = models.CharField(
-        max_length=8,
-        choices=UserStatus.choices,
-        default=UserStatus.PENDING,
-        null=True
+        max_length=8, choices=UserStatus.choices, default=UserStatus.PENDING, null=True
     )
 
     class Meta:

@@ -10,8 +10,8 @@ from order.services.month import MonthOrderService
 
 
 class MonthOrderView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
         serializer = MyMonthOrderSerializer(
@@ -21,8 +21,11 @@ class MonthOrderView(APIView):
 
 
 class MonthRateView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request) -> Response:
-        return Response(MonthOrderService().get_month_rate(request.user).data, status=status.HTTP_200_OK)
+        return Response(
+            MonthOrderService().get_month_rate(request.user).data,
+            status=status.HTTP_200_OK,
+        )

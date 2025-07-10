@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -52,9 +53,7 @@ INSTALLED_APPS = [
     "community",
 ]
 
-REST_FRAMEWORK = {
-    "EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler"
-}
+REST_FRAMEWORK = {"EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler"}
 
 MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
@@ -66,12 +65,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
-    "request_logging.middleware.LoggingMiddleware"
+    "request_logging.middleware.LoggingMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = "user.User"
 
 TEMPLATES = [
     {
@@ -180,7 +179,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = "/var/www/jusicool/staticfiles/"
 
-CSRF_TRUSTED_ORIGINS=["https://*.jusicool.shop"]
+CSRF_TRUSTED_ORIGINS = ["https://*.jusicool.shop"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -204,7 +203,9 @@ CRYPTO_API_BASE_URL = os.environ.get("CRYPTO_API_BASE_URL", "https://api.upbit.c
 SCHEDULER_DEFAULT = True
 
 # Exchange api base url
-EXCHANGE_API_BASE_URL = os.environ.get("EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4")
+EXCHANGE_API_BASE_URL = os.environ.get(
+    "EXCHANGE_API_BASE_URL", "https://api.exchangerate-api.com/v4"
+)
 
 # Kis Key
 KIS_APP_KEY = os.environ.get("KIS_APP_KEY")

@@ -13,10 +13,10 @@ from order.services.order import OrderService
 
 class ReserveOrderServiceImpl(OrderService):
     def __init__(
-            self,
-            account: Account = Account,
-            market: Market = Market,
-            holding: Holding = Holding
+        self,
+        account: Account = Account,
+        market: Market = Market,
+        holding: Holding = Holding,
     ):
         self.account = account
         self.market = market
@@ -30,7 +30,7 @@ class ReserveOrderServiceImpl(OrderService):
         trade_price, price = self._calculate_price(
             market.market,
             quantity=serializer.validated_data.get("quantity"),
-            market_type=market.market_type
+            market_type=market.market_type,
         )
 
         if user_account.krw_balance < trade_price:

@@ -7,19 +7,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0003_alter_account_krw_balance'),
-        ('order', '0003_alter_order_table'),
+        ("account", "0003_alter_account_krw_balance"),
+        ("order", "0003_alter_order_table"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='accounthistory',
-            name='order',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='order.order'),
+            model_name="accounthistory",
+            name="order",
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.CASCADE, to="order.order"
+            ),
         ),
         migrations.AlterField(
-            model_name='accounthistory',
-            name='history_type',
-            field=models.CharField(choices=[('EXCHANGE', 'Exchange'), ('ORDER', 'Order')], max_length=8),
+            model_name="accounthistory",
+            name="history_type",
+            field=models.CharField(
+                choices=[("EXCHANGE", "Exchange"), ("ORDER", "Order")], max_length=8
+            ),
         ),
     ]
