@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -44,6 +45,7 @@ class BoardDetailView(APIView):
         serializer = BoardDetailSerializer(board, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # 댓글 작성
     def post(self, request: Request, market: str, board_id: int) -> Response:
         serializer = CommentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -52,6 +54,21 @@ class BoardDetailView(APIView):
         )
         return Response(status=status.HTTP_201_CREATED)
 
+    # 게시글 수정
+    def put(self, request: Request, market: str, board_id: int) -> Response:
+        serializer = BoardSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.board_service.update(
+            user=request.user, market=market, board_id=board_id, serializer=serializer
+        )
+        return Response(status=status.HTTP_200_OK)
+
+    # 좋아요 토글
     def patch(self, request: Request, market: str, board_id: int) -> Response:
         self.board_service.like(user=request.user, market=market, board_id=board_id)
         return Response(status=status.HTTP_200_OK)
+
+    # 게시글 삭제
+    def delete(self, request: Request, market: str, board_id: int) -> Response:
+        self.board_service.delete(user=request.user, market=market, board_id=board_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
