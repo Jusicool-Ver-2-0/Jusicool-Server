@@ -1,6 +1,6 @@
 # services/board.py
 
-from community.models import BoardPost
+from community.models import Board
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from community.serializers import BoardPostSerializer
@@ -10,7 +10,7 @@ class BoardPostService:
 
     @staticmethod
     def list_posts():
-        return BoardPost.objects.all()
+        return Board.objects.all()
 
     @staticmethod
     @transaction.atomic
@@ -20,7 +20,7 @@ class BoardPostService:
 
     @staticmethod
     def get_post(pk, user):
-        return get_object_or_404(BoardPost, pk=pk, user=user)
+        return get_object_or_404(Board, pk=pk, user=user)
 
     @staticmethod
     @transaction.atomic

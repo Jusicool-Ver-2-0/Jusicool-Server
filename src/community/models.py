@@ -1,24 +1,27 @@
 from django.db import models
+from django.db.models import QuerySet
+
 from user.models import User
 from core.models import BaseModel
 
 
-# Create your models here.
-class BoardPost(BaseModel):
+class Board(BaseModel):
     title = models.CharField(max_length=50)
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.title
+    comment: "QuerySet[Comment]"
+
+    class Meta:
+        db_table = "board"
 
 
-class BoardComment(BaseModel):
+class Comment(BaseModel):
     comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(
-        BoardPost, on_delete=models.CASCADE, related_name="comments"
+        Board, on_delete=models.CASCADE, related_name="comment"
     )
 
-    def __str__(self):
-        return f"Comment by {self.user.username} on {self.post.title}"
+    class Meta:
+        db_table = "comment"
