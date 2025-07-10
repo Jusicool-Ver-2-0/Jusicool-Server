@@ -32,7 +32,6 @@ class BoardService:
             **serializer.validated_data
         )
 
-
     @transaction.atomic
     def like(self, user: User, market: str, board_id: int):
         board = get_object_or_404(Board, id=board_id, market__market=market)
