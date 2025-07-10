@@ -65,6 +65,7 @@ class MonthOrderService:
             market_orders = completed_orders.filter(market_id=market_id)
             market_buy = self._agg_sum(market_orders, OrderType.BUY)
             market_sell = self._agg_sum(market_orders, OrderType.SELL)
+            qty = market_orders.filter(order_type=OrderType.SELL).aggregate(q=Sum("quantity"))["q"] or 0
             m_rate = (
                 ((market_sell - market_buy) / market_buy) * 100 if market_buy else 0
             )
@@ -74,7 +75,7 @@ class MonthOrderService:
                     "market": market_obj.market,
                     "korean_name": market_obj.korean_name,
                     "rate": round(m_rate, 2),
-                    "proceed": market_sell - market_buy,
+                    "proceed": (market_sell - market_buy) * qty,
                     "day": market_obj.updated_at,
                 }
             )
