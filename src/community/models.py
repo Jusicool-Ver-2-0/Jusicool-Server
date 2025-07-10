@@ -8,12 +8,10 @@ from core.models import BaseModel
 
 class Board(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    market = models.ForeignKey(Market, on_delete=models.CASCADE)
+    market = models.ForeignKey(Market, on_delete=models.CASCADE, related_name="board")
 
     title = models.CharField(max_length=50)
     content = models.TextField()
-
-    comment: "QuerySet[Comment]"
 
     class Meta:
         db_table = "board"
@@ -21,12 +19,9 @@ class Board(BaseModel):
 
 class Comment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(
-        Board, on_delete=models.CASCADE, related_name="comment"
-    )
+    post = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="comment")
 
     comment = models.TextField()
-
 
     class Meta:
         db_table = "comment"
