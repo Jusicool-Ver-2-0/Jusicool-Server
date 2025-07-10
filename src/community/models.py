@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import QuerySet
 
 from market.models import Market
 from user.models import User
@@ -19,9 +18,18 @@ class Board(BaseModel):
 
 class Comment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="comment")
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="comment")
 
     comment = models.TextField()
 
     class Meta:
         db_table = "comment"
+
+
+class BoardLike(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="like")
+
+    class Meta:
+        db_table = "board_like"
+        unique_together = ("user", "board")

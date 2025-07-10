@@ -1,34 +1,42 @@
-# services/board.py
-
-from community.models import Board
+from community.models import Board, Comment, BoardLike
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from community.serializers import BoardPostSerializer
+from community.serializers import BoardSerializer, CommentSerializer
+from market.models import Market
+from user.models import User
 
 
-class BoardPostService:
+class BoardService:
 
-    @staticmethod
-    def list_posts():
-        return Board.objects.all()
+    def get_board_list_by_market(self, market: str):
+        return Board.objects.filter(market__market=market)
 
-    @staticmethod
     @transaction.atomic
-    def create_post(serializer, user):
-        serializer.is_valid(raise_exception=True)
-        return serializer.save(user=user)
+    def create(self, user: User, market: str, serializer: BoardSerializer):
+        Board.objects.create(
+            user=user,
+            market=get_object_or_404(Market, market=market),
+            **serializer.validated_data
+        )
 
-    @staticmethod
-    def get_post(pk, user):
-        return get_object_or_404(Board, pk=pk, user=user)
+    def get_board_detail(self, market: str, board_id: int):
+        return get_object_or_404(Board, id=board_id, market__market=market)
 
-    @staticmethod
     @transaction.atomic
-    def update_post(serializer):
-        serializer.is_valid(raise_exception=True)
-        return serializer.save()
+    def create_comment(
+        self, user: User, market, board_id, serializer: CommentSerializer
+    ):
+        Comment.objects.create(
+            user=user,
+            board=get_object_or_404(Board, id=board_id, market__market=market),
+            **serializer.validated_data
+        )
 
-    @staticmethod
+
     @transaction.atomic
-    def delete_post(post):
-        post.delete()
+    def like(self, user: User, market: str, board_id: int):
+        board = get_object_or_404(Board, id=board_id, market__market=market)
+        if board.like.filter(user=user).exists():
+            board.like.filter(user=user).delete()
+        else:
+            BoardLike.objects.create(user=user, board=board)
