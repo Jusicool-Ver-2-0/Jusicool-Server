@@ -16,3 +16,7 @@ class MarketSerializer(serializers.ModelSerializer):
 
 class MarketPredictSerializer(serializers.Serializer):
     result = serializers.BooleanField()
+
+
+class MarketPopularSearchSerializer(serializers.Serializer):
+    keyword = serializers.ListSerializer(child=serializers.CharField())
