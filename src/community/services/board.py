@@ -39,3 +39,16 @@ class BoardService:
             board.like.filter(user=user).delete()
         else:
             BoardLike.objects.create(user=user, board=board)
+
+    @transaction.atomic
+    def update(
+        self, user: User, market: str, board_id: int, serializer: BoardSerializer
+    ):
+        board = get_object_or_404(Board, user=user, market__market=market, id=board_id)
+        board.title = serializer.validated_data.get("title")
+        board.content = serializer.validated_data.get("content")
+        board.save()
+
+    @transaction.atomic
+    def delete(self, user: User, market: str, board_id: int):
+        get_object_or_404(Board, id=board_id, market__market=market, user=user).delete()
