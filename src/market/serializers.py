@@ -14,6 +14,12 @@ class MarketSerializer(serializers.ModelSerializer):
         }
 
 
+class MarketPagedSerializer(serializers.Serializer):
+    items = MarketSerializer(many=True, read_only=True)
+    page = serializers.IntegerField(read_only=True)
+    has_next = serializers.BooleanField(read_only=True)
+
+
 class MarketPredictSerializer(serializers.Serializer):
     result = serializers.BooleanField()
 
