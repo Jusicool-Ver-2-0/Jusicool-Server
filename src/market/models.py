@@ -11,3 +11,6 @@ class Market(BaseModel):
 
     class Meta:
         db_table = "market"
+        indexes = [
+            models.Index(fields=["market"], name="market_market"),
+        ]
