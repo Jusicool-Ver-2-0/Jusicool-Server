@@ -1,18 +1,27 @@
 from django.core.cache import cache
+from django.core.paginator import Paginator
 
 from market.models import Market
+from market.serializers import MarketPagedSerializer, MarketSerializer
 
 
 class MarketListService:
     def __init__(self, market: Market = Market):
         self.market = market
 
-    def get_list(self, market_type: str = None):
-        return cache.get_or_set(
+    def get_list(self, market_type: str = None, page: int = 1, size: int = 10):
+        markets = cache.get_or_set(
             f"market::list::{market_type or 'ALL'}",
-            lambda: self._fetch_from_db(market_type),
+            lambda: tuple(self._fetch_from_db(market_type)),
             timeout=60 * 60 * 24,
         )
+        paged = Paginator(markets, size).get_page(page)
+        return MarketPagedSerializer(
+            {
+                "items": MarketSerializer(paged.object_list, many=True).data,
+                "has_next": paged.has_next(),
+            },
+        ).data
 
     def _fetch_from_db(self, market_type: str = None):
         if market_type:
