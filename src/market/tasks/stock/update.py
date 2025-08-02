@@ -10,7 +10,7 @@ from market.models import Market
 logger = logging.getLogger(__name__)
 
 
-@shared_task
+@shared_task(auto_retry_for=(Exception,), max_retries=5, retry_backoff=True)
 @transaction.atomic
 def update_stock_task():
     stock_list: list[Market] = []

@@ -12,7 +12,7 @@ from market.serializers import MarketSerializer
 logger = logging.getLogger(__name__)
 
 
-@shared_task
+@shared_task(autoretry_for=(Exception,), max_retries=5, retry_backoff=True)
 @transaction.atomic
 def update_crypto_task():
     crypto_market_response = requests.get(
