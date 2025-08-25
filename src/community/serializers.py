@@ -13,7 +13,6 @@ class BoardSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
 
-
     class Meta:
         model = Board
         fields = (
