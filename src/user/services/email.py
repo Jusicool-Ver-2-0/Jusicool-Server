@@ -1,11 +1,6 @@
-import random
-
-from django.conf import settings
-from django.contrib.auth import login
 from django.core.cache import cache
-from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
-from django.template.loader import render_to_string
+from django.db.models import Q
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
@@ -29,11 +24,14 @@ class EmailService:
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
         email = serializer.validated_data.get("email")
+        user = self.user.objects.filter(
+            Q(email=email) & Q(password__isnull=True)
+        )
 
-        if self.user.objects.filter(email=email).exists():
+        if user.exists():
             raise UserAlreadyExistException()
 
-        self.user.objects.create(email=email)
+        self.user.objects.get_or_create(email=email)
 
         send_email.delay(email)
 

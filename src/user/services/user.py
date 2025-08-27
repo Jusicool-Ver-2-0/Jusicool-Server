@@ -32,7 +32,10 @@ class UserService:
         user.school = serializer.validated_data.get("school")
         user.save()
 
-        self.account.objects.create(user=user)
+        account = self.account.objects.create(user=user)
+        
+        account.krw_balance = 5000000
+        account.save()
 
     @transaction.atomic
     def signin(self, request: Request, serializer: SigninSerializer) -> None:
