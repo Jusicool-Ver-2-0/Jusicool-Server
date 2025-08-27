@@ -33,7 +33,7 @@ class UserService:
         user.save()
 
         account = self.account.objects.create(user=user)
-        
+
         account.krw_balance = 5000000
         account.save()
 

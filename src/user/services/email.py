@@ -24,9 +24,7 @@ class EmailService:
     @transaction.atomic
     def request(self, serializer: EmailRequestSerializer) -> None:
         email = serializer.validated_data.get("email")
-        user = self.user.objects.filter(
-            Q(email=email) & Q(password__isnull=True)
-        )
+        user = self.user.objects.filter(Q(email=email) & Q(password__isnull=True))
 
         if user.exists():
             raise UserAlreadyExistException()
