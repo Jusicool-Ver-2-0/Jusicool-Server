@@ -1,4 +1,4 @@
-makemigraions:
+makemigrations:
 	poetry run python src/manage.py makemigrations
 
 migrate:
