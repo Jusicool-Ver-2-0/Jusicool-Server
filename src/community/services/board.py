@@ -9,7 +9,11 @@ from user.models import User
 class BoardService:
 
     def get_board_list_by_market(self, market: str):
-        return Board.objects.filter(market__market=market)
+        return (
+            Board.objects.filter(market__market=market)
+            .select_related("user", "market")
+            .prefetch_related("comment", "like")
+        )
 
     @transaction.atomic
     def create(self, user: User, market: str, serializer: BoardSerializer):
@@ -20,7 +24,11 @@ class BoardService:
         )
 
     def get_board_detail(self, market: str, board_id: int):
-        return get_object_or_404(Board, id=board_id, market__market=market)
+        return get_object_or_404(
+            Board.objects.filter(market__market=market, id=board_id)
+            .select_related("user", "market")
+            .prefetch_related("comment", "like")
+        )
 
     @transaction.atomic
     def create_comment(
