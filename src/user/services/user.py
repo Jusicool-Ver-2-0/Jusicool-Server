@@ -4,10 +4,10 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
 from account.models import Account
-from user.enums import UserStatus
 from user.exceptions import UserIsNotValidException, UserAlreadyExistException
 from user.models import User
-from user.serializers import SignupSerializer, SigninSerializer
+from user.serializers.signin import SigninSerializer
+from user.serializers.signup import SignupSerializer
 
 
 class UserService:
@@ -21,7 +21,7 @@ class UserService:
             username=serializer.validated_data.get("username")
         ).exists()
         if exist_user:
-            raise UserAlreadyExistException()
+            raise UserAlreadyExistException
 
         user = get_object_or_404(
             self.user, email=serializer.validated_data.get("email")
@@ -43,15 +43,12 @@ class UserService:
             self.user, email=serializer.validated_data.get("email")
         )
 
-        if user.status != UserStatus.ACTIVE:
-            raise UserIsNotValidException()
-
         authenticated_user = authenticate(
             request,
             username=user.username,
             password=serializer.validated_data.get("password"),
         )
         if authenticated_user is None:
-            raise UserIsNotValidException()
+            raise UserIsNotValidException
 
         login(request=request, user=authenticated_user)

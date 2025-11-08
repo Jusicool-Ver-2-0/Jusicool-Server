@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from core.permissions import NotAuthenticated
 from core.throttles import OneMinuteAnonThrottle
-from user.serializers import EmailRequestSerializer, EmailValidateSerializer
+from user.serializers.email import EmailRequestSerializer, EmailValidateSerializer
 from user.services.email import EmailService
 from core.authentications import CsrfExemptSessionAuthentication
 

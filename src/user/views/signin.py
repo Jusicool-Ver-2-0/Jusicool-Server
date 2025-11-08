@@ -3,7 +3,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from user.serializers import SigninSerializer
+from user.serializers.signin import SigninSerializer
 from user.services.user import UserService
 from core.authentications import CsrfExemptSessionAuthentication
 

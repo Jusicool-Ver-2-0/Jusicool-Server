@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from core.models import BaseModel
-from user.enums import UserStatus
 
 
 class User(BaseModel, AbstractUser):
@@ -14,10 +13,6 @@ class User(BaseModel, AbstractUser):
         unique=True,
         null=True,
         blank=True,
-    )
-
-    status = models.CharField(
-        max_length=8, choices=UserStatus.choices, default=UserStatus.PENDING, null=True
     )
 
     class Meta:

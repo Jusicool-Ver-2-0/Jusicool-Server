@@ -5,10 +5,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 
 from account.models import Account
-from user.enums import UserStatus
 from user.exceptions import CodeIsNotValidException, UserAlreadyExistException
 from user.models import User
-from user.serializers import EmailValidateSerializer, EmailRequestSerializer
+from user.serializers.email import EmailRequestSerializer, EmailValidateSerializer
 from user.tasks import send_email
 
 
@@ -27,7 +26,7 @@ class EmailService:
         user = self.user.objects.filter(Q(email=email) & Q(password__isnull=True))
 
         if user.exists():
-            raise UserAlreadyExistException()
+            raise UserAlreadyExistException
 
         self.user.objects.get_or_create(email=email)
 
@@ -39,10 +38,10 @@ class EmailService:
 
         code = cache.get(email)
         if code != serializer.validated_data.get("code"):
-            raise CodeIsNotValidException()
+            raise CodeIsNotValidException
 
         user: User = get_object_or_404(self.user, email=email)
-        user.status = UserStatus.ACTIVE
+        user.is_active = True
         user.save()
 
         cache.delete(email)
