@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "jusicool.urls"
 
 TEMPLATES = [
     {
@@ -115,3 +116,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SHELL_PLUS = "ipython"
+
+SHELL_PLUS_PRINT_SQL = False
+SHELL_PLUS_PRINT_SQL_TRUNCATE = 1000
+SHELL_PLUS_PRINT_SQL_LOCATION = True

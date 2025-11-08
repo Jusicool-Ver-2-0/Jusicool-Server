@@ -1,13 +1,16 @@
 from .base import *
 
+WSGI_APPLICATION = "config.wsgi.local.application"
 
-DATABASES["default"] = {
-    "ENGINE": "django.db.backends.postgresql",
-    "NAME": "jusicool",
-    "USER": "postgres",
-    "PASSWORD": "postgres",
-    "HOST": "localhost",
-    "PORT": "5432",
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "jusicool",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
 }
 
 CACHE = {

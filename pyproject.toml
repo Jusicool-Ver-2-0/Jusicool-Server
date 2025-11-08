@@ -23,7 +23,16 @@ dependencies = [
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 isort = "^7.0.0"
+django-extensions = "^4.1"
+ipython = "^9.7.0"
+notebook = "^7.4.7"
+pytest-django = "^4.11.1"
+factory-boy = "^3.3.3"
+drf-spectacular = "^0.29.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = false
