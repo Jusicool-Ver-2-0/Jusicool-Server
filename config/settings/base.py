@@ -154,15 +154,15 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = environ["EMAIL_HOST_USER"]
-EMAIL_HOST_PASSWORD = environ["EMAIL_HOST_PASSWORD"]
+EMAIL_HOST_USER = environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # ==========
 # celery
 # ==========
-CELERY_BROKER_URL = environ["REDIS_HOST"]
-CELERY_RESULT_BACKEND = environ["REDIS_HOST"]
+CELERY_BROKER_URL = environ.get("REDIS_HOST")
+CELERY_RESULT_BACKEND = environ.get("REDIS_HOST")
 
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
