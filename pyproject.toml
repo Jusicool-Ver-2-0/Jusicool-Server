@@ -6,33 +6,26 @@ authors = [
     {name = "Jueuunn7",email = "wndmsrla1234@gmail.com"}
 ]
 readme = "README.md"
-requires-python = "^3.11"
+requires-python = ">=3.12"
 dependencies = [
-    "django (>=5.2,<6.0)",
-    "djangorestframework (>=3.16.0,<4.0.0)",
-    "psycopg2-binary (>=2.9.10,<3.0.0)",
-    "django-redis (>=5.4.0,<6.0.0)",
-    "requests (>=2.32.3,<3.0.0)",
-    "gunicorn (>=23.0.0,<24.0.0)",
-    "celery (>=5.5.2,<6.0.0)",
-    "django-celery-beat (>=2.8.0,<3.0.0)",
-    "pykrx (>=1.0.51,<2.0.0)",
-    "pykis (>=0.7.0,<0.8.0)",
+    "django>=6.0",
+    "djangorestframework>=3.16.0,<4.0.0",
+    "psycopg2-binary>=2.9.10,<3.0.0",
+    "django-redis>=5.4.0,<6.0.0",
+    "requests>=2.32.3,<3.0.0",
+    "gunicorn>=23.0.0,<24.0.0",
+    "celery>=5.5.2,<6.0.0",
+    "factory-boy>=3.3.3",
+    "drf-spectacular>=0.29.0",
+    "django-extensions>=4.1",
+    "pytest-django>=4.11.1",
+    "flower>=2.0.1",
 ]
 
-[tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
-isort = "^7.0.0"
-django-extensions = "^4.1"
-ipython = "^9.7.0"
-notebook = "^7.4.7"
-pytest-django = "^4.11.1"
-factory-boy = "^3.3.3"
-drf-spectacular = "^0.29.0"
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-package-mode = false
+[project.optional-dependencies]
+dev = [
+    "black>=25.1.0",
+    "isort>=7.0.0",
+    "ipython>=9.7.0",
+    "notebook>=7.4.7",
+]
