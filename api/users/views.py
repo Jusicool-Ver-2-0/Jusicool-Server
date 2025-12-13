@@ -8,12 +8,12 @@ from api.users.schema import email_send_schema
 from api.users.serializers import SendVerifyCodeSerializer
 from apps.users.services import UserVerificationService
 from core.exceptions import InvalidRequestError
-from core.throttles import OneMinuteAnonRateThrottle
+from core.throttles import TwoRequestPerOneMinuteAnonRateThrottle
 
 
 class EmailRequestView(APIView):
     permission_classes = [AllowAny]
-    throttle_classes = [OneMinuteAnonRateThrottle]
+    throttle_classes = [TwoRequestPerOneMinuteAnonRateThrottle]
 
     @email_send_schema
     def post(self, request: Request) -> Response:
