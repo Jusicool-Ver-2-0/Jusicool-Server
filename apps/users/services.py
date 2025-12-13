@@ -1,5 +1,3 @@
-import logging
-
 from django.db import transaction
 
 from apps.users.models import User
