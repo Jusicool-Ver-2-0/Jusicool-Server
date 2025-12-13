@@ -1,4 +1,4 @@
-name: Style Checker Workflow
+name: Test Workflow
 
 on:
   pull_request:
@@ -24,6 +24,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install uv
         uv sync  --extra dev
-    - name: Run Style checker
+    - name: Run Test
       run: |
         uv run pytest
