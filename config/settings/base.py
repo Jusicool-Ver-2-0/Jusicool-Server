@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+from os import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,7 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Add-on
+    "rest_framework",
+    "drf_spectacular",
     "django_extensions",
+    # Apps
+    "apps.users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -50,12 +57,17 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+
 ROOT_URLCONF = "jusicool.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR.parent / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -122,3 +134,38 @@ SHELL_PLUS = "ipython"
 SHELL_PLUS_PRINT_SQL = False
 SHELL_PLUS_PRINT_SQL_TRUNCATE = 1000
 SHELL_PLUS_PRINT_SQL_LOCATION = True
+
+AUTH_USER_MODEL = "users.User"
+
+# ==========
+# OpenAPI
+# ==========
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Jusicool API",
+    "DESCRIPTION": "Jusicool API documentation",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+# ==========
+# email
+# ==========
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# ==========
+# celery
+# ==========
+CELERY_BROKER_URL = environ.get("REDIS_HOST")
+CELERY_RESULT_BACKEND = environ.get("REDIS_HOST")
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_IGNORE_RESULT = True

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ email_title }}</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border: 1px solid #dddddd;
+      border-radius: 8px;
+      padding: 40px;
+    }
+    .header {
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 16px;
+      margin-bottom: 32px;
+    }
+    .header h1 {
+      font-size: 20px;
+      margin: 0;
+      color: #2c2c2c;
+    }
+    .content {
+      font-size: 15px;
+      color: #333333;
+      line-height: 1.7;
+    }
+    .content p {
+      margin-bottom: 20px;
+    }
+    .code {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      color: #2c2c2c;
+      letter-spacing: 2px;
+      margin: 30px 0;
+    }
+    .signature {
+      margin-top: 40px;
+    }
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      font-size: 12px;
+      color: #888888;
+      text-align: center;
+      border-top: 1px solid #eaeaea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Jusicool 인증 메일</h1>
+    </div>
+    <div class="content">
+      <p>{{ recipient_name }}님,</p>
+
+      <p>아래 인증 코드를 입력해 주세요:</p>
+
+      <p class="code">{{ verification_code }}</p>
+
+      <p>이 코드는 10분 동안 유효합니다. 인증 요청을 하지 않으셨다면 이 메일을 무시하셔도 됩니다.</p>
+
+      <p class="signature">
+        감사합니다.<br>
+        Jusicool 팀 드림
+      </p>
+    </div>
+    <div class="footer">
+      본 메일은 발신 전용입니다. 문의는 웹사이트를 통해 접수해 주세요.
+    </div>
+  </div>
+</body>
+</html>
