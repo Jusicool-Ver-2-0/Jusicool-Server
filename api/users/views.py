@@ -4,11 +4,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.users.schema import email_send_schema
 from api.users.serializers import SendVerifyCodeSerializer
 from apps.users.services import UserVerificationService
 from core.exceptions import InvalidRequestError
 from core.throttles import OneMinuteAnonRateThrottle
-from api.users.schema import email_send_schema
 
 
 class EmailRequestView(APIView):
