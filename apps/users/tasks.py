@@ -17,7 +17,7 @@ def send_email_verify_code(email: str) -> None:
         prefix=CacheKeyPrefix.email_verification_code,
         key=email,
         value=code,
-        timeout=60 * 60,
+        timeout=60 * 10,
     )
 
     html_content = render_to_string(
