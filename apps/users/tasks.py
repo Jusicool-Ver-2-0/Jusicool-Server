@@ -30,14 +30,14 @@ def send_verification_code(email: str) -> None:
         },
     )
 
-    email_multi_alternative = EmailMultiAlternatives(
+    email_message = EmailMultiAlternatives(
         subject=f"Jusicool 메일 인증 코드",
         body=html_content,
         to=[email],
         from_email=settings.EMAIL_HOST_USER,
     )
-    email_multi_alternative.attach_alternative(
+    email_message.attach_alternative(
         html_content,
         "text/html",
     )
-    email_multi_alternative.send()
+    email_message.send()
