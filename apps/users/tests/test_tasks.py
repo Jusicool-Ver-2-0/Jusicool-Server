@@ -6,10 +6,12 @@ from core.cache.prefix import CacheKeyPrefix
 
 class TestSendVerificationCode:
 
-    @patch("apps.users.tasks.Cache.set")
-    @patch("apps.users.tasks.random.randint")
+    @patch("apps.users.communication.Cache.set")
+    @patch("apps.users.communication.random.randint")
+    @patch("core.communication.tasks.send_email.delay")
     def test_send_verification_code(
         self,
+        mock_send_email,
         mock_randint,
         mock_cache_set,
     ):
@@ -30,3 +32,12 @@ class TestSendVerificationCode:
             value=mock_code,
             timeout=600,
         )
+        
+        # Verify send_email was called with correct parameters
+        mock_send_email.assert_called_once()
+        call_kwargs = mock_send_email.call_args.kwargs
+        assert call_kwargs["recipient_email"] == user_email
+        assert call_kwargs["subject"] == "Jusicool 메일 인증 코드"
+        assert call_kwargs["template_name"] == "verify_code.html"
+        assert call_kwargs["context"]["recipient_name"] == user_email
+        assert call_kwargs["context"]["verification_code"] == mock_code
