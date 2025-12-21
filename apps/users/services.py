@@ -1,16 +1,20 @@
 from django.db import transaction
 
 from apps.users.models import User
-from apps.users.tasks import send_email_verify_code
+from apps.users.tasks import send_verification_code
 
 
-class UserVerificationService:
+class EmailVerificationService:
 
     @transaction.atomic
-    def send_verification_code(self, email: str) -> None:
+    def send_verification_email(
+        self,
+        email: str,
+    ) -> None:
+        """인증 메일 발송"""
+
         User.objects.get_or_create(
             email=email,
-            defaults={"is_active": False},
         )
 
-        send_email_verify_code.delay(email=email)
+        send_verification_code.delay(email=email)

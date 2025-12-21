@@ -15,5 +15,10 @@ class User(TimeStampedModel, AbstractUser):
         null=True,
     )
 
+    is_active = models.BooleanField(
+        "계정 활성화 여부",
+        default=False,
+    )
+
     class Meta:
         db_table = "user"

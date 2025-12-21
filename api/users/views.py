@@ -6,14 +6,18 @@ from rest_framework.views import APIView
 
 from api.users.schema import email_send_schema
 from api.users.serializers import SendVerifyCodeSerializer
-from apps.users.services import UserVerificationService
+from apps.users.services import EmailVerificationService
 from core.exceptions import InvalidRequestError
 from core.throttles import TwoRequestPerOneMinuteAnonRateThrottle
 
 
-class EmailRequestView(APIView):
+class EmailVerificationAPIView(APIView):
+    """이메일 인증"""
+
     permission_classes = [AllowAny]
     throttle_classes = [TwoRequestPerOneMinuteAnonRateThrottle]
+
+    email_verification_service = EmailVerificationService()
 
     @email_send_schema
     def post(self, request: Request) -> Response:
@@ -21,7 +25,7 @@ class EmailRequestView(APIView):
         if not input_serializer.is_valid():
             raise InvalidRequestError
 
-        UserVerificationService().send_verification_code(
+        self.email_verification_service.send_verification_email(
             email=input_serializer.validated_data["email"],
         )
 
