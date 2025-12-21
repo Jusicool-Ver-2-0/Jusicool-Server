@@ -2,7 +2,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path(
-        "/user",
+        "user/",
         include("api.users.urls"),
         name="user",
     ),
