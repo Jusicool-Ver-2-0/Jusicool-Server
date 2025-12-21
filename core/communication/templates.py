@@ -23,6 +23,7 @@ class EmailTemplate(ABC):
         pass
 
     @property
+    @abstractmethod
     def recipient_email(self) -> str:
         """수신자 이메일"""
-        raise NotImplementedError("recipient_email must be implemented")
+        pass

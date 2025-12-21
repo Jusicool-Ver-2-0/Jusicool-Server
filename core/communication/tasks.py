@@ -29,7 +29,7 @@ def send_email(
 
     email_message = EmailMultiAlternatives(
         subject=subject,
-        body=html_content,
+        body="",
         to=[recipient_email],
         from_email=settings.EMAIL_HOST_USER,
     )

@@ -42,7 +42,7 @@ class TestSendEmail:
         mock_email_class.assert_called_once()
         call_kwargs = mock_email_class.call_args.kwargs
         assert call_kwargs["subject"] == subject
-        assert call_kwargs["body"] == mock_html_content
+        assert call_kwargs["body"] == ""
         assert call_kwargs["to"] == [recipient]
         
         mock_email_instance.attach_alternative.assert_called_once_with(
